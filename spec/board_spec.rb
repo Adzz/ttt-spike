@@ -1,13 +1,32 @@
 require 'spec_helper'
-require 'available_moves.rb'
+require 'board.rb'
 
-RSpec.describe AvailableMoves do
+RSpec.describe Board do
   describe "#available_positions" do
-    let(:board) { [*0..8] }
+    it 'returns the new state of the board' do
+      board = [*0..8]
+      taken_position = board.sample
+      expect(subject.available_positions(taken_position)).to eq board - [taken_position]
+    end
+  end
 
-    it 'returns the reamaining free' do
-      starting_position = board.sample
-      expect(subject.available_positions(starting_position)).to eq board - [starting_position]
+  describe "#next_possible_move" do
+    it 'when given an empty board, it returns all possible first moves' do
+      board = [*0..8]
+      expect(subject.next_possible_move(board)).to eq [
+        ["X",1,2,3,4,5,6,7,8],
+        [0,"X",2,3,4,5,6,7,8],
+        [0,1,"X",3,4,5,6,7,8],
+        [0,1,2,"X",4,5,6,7,8],
+        [0,1,2,3,"X",5,6,7,8],
+        [0,1,2,3,4,"X",6,7,8],
+        [0,1,2,3,4,5,"X",7,8],
+        [0,1,2,3,4,5,6,"X",8],
+        [0,1,2,3,4,5,6,7,"X"]
+      ]
+    end
+
+    it 'when given a board with one move, it generates the possible next move' do
     end
   end
 
