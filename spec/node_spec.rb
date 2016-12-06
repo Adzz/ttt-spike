@@ -4,6 +4,7 @@ require 'pry'
 
 RSpec.describe Node do
   context 'checking for an illegal board' do
+    binding.pry
     it 'player cant be O if there is no X on the board (X goes first)' do
       expect { Node.new("O", [1,2,3]) }.to raise_exception(IllegalBoard)
     end
