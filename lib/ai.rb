@@ -1,10 +1,11 @@
 class AI
-  def initialize(graph)
+  def initialize(graph, player)
     @graph = graph
+    @player = player
   end
 
   def next_move(board)
-    binding.pry
+    return ["X",1,2,3,4,5,6,7,8] unless board.include?("X") || board.include?("O")
     tree = graph.add_node(Node.new("X", board))
     tree[board]
   end

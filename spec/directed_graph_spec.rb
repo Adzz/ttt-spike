@@ -14,9 +14,10 @@ RSpec.describe DirectedGraph do
     end
 
     it 'adds all possible nodes to a graph' do
-      node = Node.new("O", ["X","O",2,"X",4,5])
+      node = Node.new("O", ["X","O",2,"X",4])
       tree = subject.add_node(node)
       binding.pry
+      puts tree
     end
   end
 end
