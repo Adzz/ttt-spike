@@ -12,12 +12,14 @@ class DirectedGraph
   # end
 
   def add_node(node)
-    binding.pry
-    nodes[node.current_state] = node
+    return @nodes if (node.current_state - ["X"] - ["O"]).empty?
+    @nodes[node.current_state] = node
     node.successors.each do |successor|
-     nodes[successor.current_state] = successor
+      add_node(successor)
     end
   end
 
-  attr_reader :nodes
+  def [](state)
+    @nodes[state]
+  end
 end

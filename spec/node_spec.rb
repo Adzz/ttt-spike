@@ -4,17 +4,16 @@ require 'pry'
 
 RSpec.describe Node do
   context 'checking for an illegal board' do
-    binding.pry
     it 'player cant be O if there is no X on the board (X goes first)' do
-      expect { Node.new("O", [1,2,3]) }.to raise_exception(IllegalBoard)
+      expect { Node.new("O", [1,2,3]) }.to raise_exception(ArgumentError)
     end
 
     it "player can't be X if it's O's turn" do
-      expect { Node.new("X", ["X","O","X",3]) }.to raise_exception(IllegalBoard)
+      expect { Node.new("X", ["X","O","X",3]) }.to raise_exception(ArgumentError)
     end
 
     it "player can't be O if it's X's turn" do
-      expect { Node.new("O", ["X","O",2]) }.to raise_exception(IllegalBoard)
+      expect { Node.new("O", ["X","O",2]) }.to raise_exception(ArgumentError)
     end
   end
 

@@ -1,8 +1,17 @@
 class AI
-  def next_move(board)
-    tree[board] #=> move to make
-    
+  def initialize(graph)
+    @graph = graph
   end
+
+  def next_move(board)
+    binding.pry
+    tree = graph.add_node(Node.new("X", board))
+    tree[board]
+  end
+
+  private
+
+  attr_reader :graph
 end
 
 # [
@@ -63,11 +72,11 @@ end
 
 
 
-# Depth first search. Terminate the search as soon as we can 
-# assign a score, I.E, we know the route will draw, win or lose. 
-# As soon as a path's score dips below a previously calculated 
+# Depth first search. Terminate the search as soon as we can
+# assign a score, I.E, we know the route will draw, win or lose.
+# As soon as a path's score dips below a previously calculated
 # score, (the besta? lowest current path score) terminate further calculation, and go to the next top node to keep the DFS.
-# Also is it possible that as soon as we hit 10, don't calculate anymore moves? If one route gets a win in one go, weigh it higher than the one that gets a win in two goes, the latter is less likely to happen. 
+# Also is it possible that as soon as we hit 10, don't calculate anymore moves? If one route gets a win in one go, weigh it higher than the one that gets a win in two goes, the latter is less likely to happen.
 
 
 # we need to sum the values of a bunch of paths. The path which leads to more winning paths is favoured.
