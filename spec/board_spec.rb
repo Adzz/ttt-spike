@@ -10,26 +10,6 @@ RSpec.describe Board do
     end
   end
 
-  describe "#next_possible_move" do
-    it 'when given an empty board, it returns all possible first moves' do
-      board = [*0..8]
-      expect(subject.next_possible_move(board)).to eq [
-        ["X",1,2,3,4,5,6,7,8],
-        [0,"X",2,3,4,5,6,7,8],
-        [0,1,"X",3,4,5,6,7,8],
-        [0,1,2,"X",4,5,6,7,8],
-        [0,1,2,3,"X",5,6,7,8],
-        [0,1,2,3,4,"X",6,7,8],
-        [0,1,2,3,4,5,"X",7,8],
-        [0,1,2,3,4,5,6,"X",8],
-        [0,1,2,3,4,5,6,7,"X"]
-      ]
-    end
-
-    it 'when given a board with one move, it generates the possible next move' do
-    end
-  end
-
   describe "#winning_board" do
     it 'returns true if X take the top row' do
       board = ["X","X","X",3,4,5,6,7,8]

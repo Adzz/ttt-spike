@@ -1,37 +1,25 @@
 class AI
-  def initialize(graph, player)
-    @graph = graph
-    @player = player
-  end
-
   def next_move(board)
-    return ["X",1,2,3,4,5,6,7,8] unless board.include?("X") || board.include?("O")
-    tree = graph.add_node(Node.new("X", board))
-    tree[board]
+    return ["X",1,2,3,4,5,6,7,8] unless board.include?(player)
   end
 
-  private
-
-  attr_reader :graph
+  def player
+    raise NotImplementedError
+  end
 end
 
-# [
-#   "X",1,2,
-#   3,4,5,
-#   6,7,8
-# ]
+class AI_X < AI
+  def player
+    "X"
+  end
+end
 
-# [
-#   "X",1,2,
-#   3,4,5,
-#   6,7,8
-# ]
-# 1st round going first - corner
-# 1st round going second - middle
+class AI_O < AI
+  def player
+    "O"
+  end
+end
 
-# 2nd Round going first
-
- # MOVES could be a yaml file we read in and lookup board, it returns the optimal position given the board layout.
 
 # class Node
 #   attr_reader :successors, :state
@@ -55,35 +43,6 @@ end
 #     successor.count
 #   end
 # end
-# #  why have both. Edges are all that matter, and they are better named as nodes. All we need is to know the thing exists, and what other things it points to.
-# class Edge
-#   def initialize(tail_node, head_node)
-#     @tail_node = tail_node
-#     @head_node = head_node
-#     @weight
-#   end
-
-#   attr_accessor :weight
-#   attr_reader :tail_node, :head_node
-# end
-
-# The in-degree   of a node is the number of edges incident on that node. IE, how many nodes is it a child of? Can only be known from the graph level?
-
-# Path == a non empty series of nodes, that are connected
-
-
-
-# Depth first search. Terminate the search as soon as we can
-# assign a score, I.E, we know the route will draw, win or lose.
-# As soon as a path's score dips below a previously calculated
-# score, (the besta? lowest current path score) terminate further calculation, and go to the next top node to keep the DFS.
-# Also is it possible that as soon as we hit 10, don't calculate anymore moves? If one route gets a win in one go, weigh it higher than the one that gets a win in two goes, the latter is less likely to happen.
-
-
-# we need to sum the values of a bunch of paths. The path which leads to more winning paths is favoured.
-
-
-
 
 
 

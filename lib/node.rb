@@ -1,4 +1,5 @@
 require 'pry'
+
 class Node
   def initialize(player, current_state)
     validate_board(player, current_state)
@@ -8,16 +9,24 @@ class Node
 
   attr_reader :current_state
 
-  def successors
-    @successors ||= current_state.each_with_index.with_object([]) do |(value, index), successors|
-      next unless value.is_a? Numeric
-      possible_next_move = current_state.dup
-      possible_next_move[index] = player
-      successors << Node.new(other_player, possible_next_move)
-    end
-  end
+  # def successors
+  #   @successors ||= current_state.each_with_index.with_object([]) do |(value, index), successors|
+  #     next unless value.is_a? Numeric
+  #     possible_next_move = current_state.dup
+  #     possible_next_move[index] = player
+  #     successors << Node.new(other_player, possible_next_move)
+  #   end
+  # end
 
-  private
+  # def visit_successors
+  #   successors.each do |node|
+  #     yield node
+  #   end
+  # end
+
+  def [](state)
+    current_state
+  end
 
   attr_reader :player
 
