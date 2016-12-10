@@ -22,9 +22,16 @@ RSpec.describe DirectedGraph do
 
   context 'creating paths' do
     it 'generate all possible paths for a given edge' do
-      player = "X"
-      board = [*0..3]
-      expect(subject.get_possibilities(player, board)).to eq 1
+      node = Node.new("X", [*0..3])
+      subject.get_possibilities(node)
+      binding.pry
+      # expect(subject.get_possibilities(player, board)).to eq 1
+    end
+  end
+
+  context 'combinations' do
+    it 'produces the correct array of combinations' do
+      binding.pry
     end
   end
 end
