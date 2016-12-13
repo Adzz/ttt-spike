@@ -1,18 +1,13 @@
 class DirectedGraph
-  def initialize
-    @nodes = []
-    @edges = tree
-    @paths = []
+  def initialize(node)
+    @node = node
+    @game_tree = tree
   end
 
-  attr_reader :nodes, :edges, :paths
+  attr_reader :game_tree
 
-  def add_edge(from, to)
-    edges[from] = to
-  end
-
-  def get_possibilities(node)
-    index_combinations.each do |index_combo|
+  def possibilities
+    index_combinations.each_with_index do |index_combo|
       first_wave   = node.successors[index_combo[0]]
       second_wave  = first_wave.successors[index_combo[1]]
       third_wave   = second_wave.successors[index_combo[2]]
@@ -23,44 +18,39 @@ class DirectedGraph
       eigth_wave   = seventh_wave.successors[index_combo[7]]
       ninth_wave   = eigth_wave.successors[index_combo[8]]
 
-      paths << [node.current_state, first_wave.current_state, second_wave.current_state, third_wave.current_state, fourth_wave.current_state, fifth_wave.current_state, sixth_wave.current_state, seventh_wave.current_state, eigth_wave.current_state, ninth_wave.current_state]
-      # paths[node.current_state][first_wave.current_state][second_wave.current_state][third_wave.current_state][fourth_wave.current_state][fifth_wave.current_state][sixth_wave.current_state][seventh_wave.current_state][eigth_wave.current_state] = ninth_wave.current_state
+      if game_tree.empty?
+        game_tree[board][first_wave.current_state][second_wave.current_state][third_wave.current_state][fourth_wave.current_state][fifth_wave.current_state][sixth_wave.current_state][seventh_wave.current_state][eigth_wave.current_state] = ninth_wave.current_state
+      else
+        path = tree
+
+        path[board][first_wave.current_state][second_wave.current_state][third_wave.current_state][fourth_wave.current_state][fifth_wave.current_state][sixth_wave.current_state][seventh_wave.current_state][eigth_wave.current_state] = ninth_wave.current_state
+
+        deep_merge!(game_tree, path)
+      end
     end
-    paths
-    # node.current_state.each_with_index.with_object([]) do |(value, index), object|
-    #   next unless value.is_a? Numeric
-    #   possible_next_move = node.current_state.dup
-    #   possible_next_move[index] = node.player
+    game_tree
+  end
 
-    #   possibility = Node.new(other_player(node.player), possible_next_move)
-    #   add_edge(node.current_state, possibility.current_state)
+  private
 
-    #   get_possibilities(possibility)
-    # end
+  attr_reader :node
+
+  def board
+    node.current_state
+  end
+
+  def deep_merge!(into_this_hash, this_hash)
+    into_this_hash.merge!(this_hash) do |key, first_hash_value, second_hash_value|
+      deep_merge!(first_hash_value, second_hash_value)
+    end
   end
 
   def index_combinations
-    board = [*0..8]
     index_combinations = []
     board.each_with_index do |_pos, index|
       index_combinations << [*0.. (board.length - (index + 1))]
     end
     index_combinations.first.product(*index_combinations[1..-1])
-  end
-
- # paths[board] = add_edge(Node.new(player, board), Node.new(other_player(player), possible_next_move))
-
-  def add_node(node)
-    nodes << node.current_state
-    node.successors.each_with_index do |successor|
-      successor.successors
-    end
-  end
-
-
-
-  def other_player(player)
-    player == "O" ? "X" : "O"
   end
 
   def tree

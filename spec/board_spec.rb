@@ -79,4 +79,8 @@ RSpec.describe Board do
       expect(subject.winning_board?(board)).to be false
     end
   end
+
+  describe "#losing_board" do
+
+  end
 end

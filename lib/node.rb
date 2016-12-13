@@ -1,5 +1,3 @@
-require 'pry'
-
 class Node
   def initialize(player, current_state)
     validate_board(player, current_state)
@@ -18,15 +16,7 @@ class Node
     end
   end
 
-  # def visit_successors
-  #   successors.each do |node|
-  #     yield node
-  #   end
-  # end
-
-  def [](state)
-    current_state
-  end
+  private
 
   attr_reader :player
 

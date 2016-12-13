@@ -1,37 +1,32 @@
 require 'spec_helper'
 require 'directed_graph'
 require 'node'
-require 'pry'
 
 RSpec.describe DirectedGraph do
-  let(:node) { Node.new("X", [*0..8]) }
-
-  xcontext '#add_edge' do
-    it 'addes an edge from one node to another' do
-      node = Node.new("X", [*0..3])
-      expect(subject.add_edge(node, node.successors[0])).to match a_hash_including(node => node.successors.first)
-    end
-  end
-
-  context '#add_node' do
-    xit 'addes a node to the graph' do
-      node = Node.new("X", [*0..3])
-      expect { subject.add_node(node) }.to change { subject.nodes.count }.from(0).to(1)
-    end
-  end
-
-  context 'creating paths' do
-    it 'generate all possible paths for a given edge' do
-      node = Node.new("X", [*0..3])
-      subject.get_possibilities(node)
+  context 'generating a game tree' do
+    it 'produces a game tree of all possible states for a given board' do
+      node = Node.new("X", [*0..2])
+      directed_graph = described_class.new(node)
       binding.pry
-      # expect(subject.get_possibilities(player, board)).to eq 1
-    end
-  end
-
-  context 'combinations' do
-    it 'produces the correct array of combinations' do
-      binding.pry
+      directed_graph.possibilities
+      expect(directed_graph.game_tree).to match a_hash_including(
+        {
+          [0,1,2] => {
+            ["X",1,2] => {
+              ["X","O",2] => ["X","O","X"],
+              ["X",1,"O"] => ["X","X","O"]
+            },
+            [0,"X",2] => {
+              [0,"X","O"] => ["X","X","O"],
+              ["O","X",2] => ["O","X","X"]
+            },
+            [0,1,"X"] => {
+              [0,"O","X"] => ["X","O","X"],
+              ["O",1,"X"] => ["O","X","X"]
+            }
+          }
+        }
+      )
     end
   end
 end
