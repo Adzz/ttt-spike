@@ -2,9 +2,12 @@ class DirectedGraph
   def initialize(node)
     @node = node
     @game_tree = tree
+    possibilities
   end
 
   attr_reader :game_tree
+
+  private
 
   def possibilities
     index_combinations.each_with_index do |index_combo|
@@ -30,8 +33,6 @@ class DirectedGraph
     end
     game_tree
   end
-
-  private
 
   attr_reader :node
 

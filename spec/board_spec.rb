@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'board.rb'
 
 RSpec.describe Board do
-  describe "#available_positions" do
+  xdescribe "#available_positions" do
     it 'returns the new state of the board' do
       board = [*0..8]
       taken_position = board.sample

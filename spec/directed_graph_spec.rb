@@ -7,8 +7,6 @@ RSpec.describe DirectedGraph do
     it 'produces a game tree of all possible states for a given board' do
       node = Node.new("X", [*0..2])
       directed_graph = described_class.new(node)
-      binding.pry
-      directed_graph.possibilities
       expect(directed_graph.game_tree).to match a_hash_including(
         {
           [0,1,2] => {

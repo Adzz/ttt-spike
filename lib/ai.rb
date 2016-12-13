@@ -1,58 +1,29 @@
-class Player
-  WINNING_LINES = [
-    [0,1,2],
-    [3,4,5],
-    [6,7,8],
-    [0,3,6],
-    [2,4,6],
-    [0,4,8],
-    [1,4,7],
-    [2,5,8]
-  ]
+require 'pry'
 
-  def winner?(board)
-    WINNING_LINES.each do |line|
-      return true if board.values_at(*line) == [player, player, player]
+module Player
+  class AI_X
+    def initialize(game_tree)
+      @player = "X"
+      @game_tree = game_tree
     end
-    false
-  end
 
-  def loser?(board)
-    WINNING_LINES.each do |line|
-      return true if board.values_at(*line) == [other_player, other_player, other_player]
+    def next_move(game_state)
+      return ["X",1,2,3,4,5,6,7,8] if game_state.count < 2
+      possible_moves = game_tree.dig(*game_state)
+      evaluate(possible_moves)
     end
-    false
+
+    private
+
+    def evaluate(possible_moves)
+      possible_moves.each do |key, path|
+        evaluate(path) if value.is_a? Hash
+        path_weight= 10 if winner?(value)
+        path_weight= -10 if loser?(value)
+        path_weight= 0 if draw?(value)
+      end
+    end
+
+    attr_reader :player, :game_tree
   end
 end
-
-class AI < Player
-  def next_move(board)
-    raise NotImplementedError
-  end
-
-  def player
-    raise NotImplementedError
-  end
-end
-
-class AI_X < AI
-  def player
-    "X"
-  end
-
-  def next_move(board)
-    return ["X",1,2,3,4,5,6,7,8] unless board.include?(player)
-  end
-end
-
-class AI_O < AI
-  def player
-    "O"
-  end
-
-  def next_move(board)
-    game_tree[board]
-  end
-end
-
-

@@ -1,10 +1,4 @@
 class Board
-  attr_reader :state
-
-  def initialize(state)
-    @state = state
-  end
-
   STARTING_POSITIONS = [*0..8]
   WINNING_LINES = [
     [0,1,2],
@@ -28,7 +22,6 @@ class Board
     end
     false
   end
-
 end
 
 
