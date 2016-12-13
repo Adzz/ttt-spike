@@ -1,11 +1,13 @@
 require 'spec_helper'
 require 'directed_graph'
 require 'node'
+require 'pry'
 
 RSpec.describe DirectedGraph do
   context 'generating a game tree' do
     it 'produces a game tree of all possible states for a given board' do
-      node = Node.new("X", [*0..2])
+      node = Node.new("X", [*0..8])
+      binding.pry
       directed_graph = described_class.new(node)
       expect(directed_graph.game_tree).to match a_hash_including(
         {
