@@ -3,7 +3,7 @@ require 'directed_graph.rb'
 require 'node.rb'
 require 'ai.rb'
 
-RSpec.describe Player::AI_X do
+RSpec.describe AI_X do
   context 'When X' do
     let(:node)      { Node.new("X", [*0..8]) }
     let(:game_tree) { DirectedGraph.new(node).game_tree }
