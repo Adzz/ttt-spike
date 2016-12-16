@@ -11,15 +11,26 @@ class AI_X
     @paths = []
   end
 
+  # def next_move(game_state)
+  #   return ["X",1,2,3,4,5,6,7,8] if game_state.count < 2
+  #   possible_moves = game_tree.dig(*game_state)
+  #   create_paths(possible_moves)
+  #   evaluate(paths)
+  #   binding.pry
+  # end
+
   def next_move(game_state)
     return ["X",1,2,3,4,5,6,7,8] if game_state.count < 2
-    possible_moves = game_tree.dig(*game_state)
-    create_paths(possible_moves)
-    evaluate(paths)
-    binding.pry
+    generate_possible_moves(game_state)
   end
 
   private
+
+  def generate_possible_moves(game_state)
+    node = Node.new(player, game_state)
+    free_spaces = (board - ["X"] - ["O"]).count
+    free_spaces.times { node.successors }
+  end
 
   def create_paths(possible_moves)
     possible_moves.each do |key, value|

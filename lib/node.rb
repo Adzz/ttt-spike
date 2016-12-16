@@ -1,4 +1,15 @@
 class Node
+    WINNING_LINES = [
+    [0,1,2],
+    [3,4,5],
+    [6,7,8],
+    [0,3,6],
+    [2,4,6],
+    [0,4,8],
+    [1,4,7],
+    [2,5,8]
+  ]
+
   def initialize(player, current_state)
     validate_board(player, current_state)
     @player = player
@@ -14,6 +25,24 @@ class Node
       possible_next_move[index] = player
       successors << Node.new(other_player, possible_next_move)
     end
+  end
+
+  def winning?
+    WINNING_LINES.each do |line|
+      return true if current_state.values_at(*line) == [player, player, player]
+    end
+    false
+  end
+
+  def losing?
+    WINNING_LINES.each do |line|
+      return true if current_state.values_at(*line) == [other_player, other_player, other_player]
+    end
+    false
+  end
+
+  def drawing?
+    (current_state - ["X"] - ["O"]).empty? && !losing(current_state) && !winning?(current_state)
   end
 
   private

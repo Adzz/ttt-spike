@@ -1,3 +1,5 @@
+require 'pry'
+
 class DirectedGraph
   def initialize(node)
     @node = node
@@ -10,28 +12,37 @@ class DirectedGraph
   private
 
   def possibilities
-    index_combinations.each_with_index do |index_combo|
-      first_wave   = node.successors[index_combo[0]]
-      second_wave  = first_wave.successors[index_combo[1]]
-      third_wave   = second_wave.successors[index_combo[2]]
-      fourth_wave  = third_wave.successors[index_combo[3]]
-      fifth_wave   = fourth_wave.successors[index_combo[4]]
-      sixth_wave   = fifth_wave.successors[index_combo[5]]
-      seventh_wave = sixth_wave.successors[index_combo[6]]
-      eigth_wave   = seventh_wave.successors[index_combo[7]]
-      ninth_wave   = eigth_wave.successors[index_combo[8]]
+    [routes[0]].each do |node_locations|
+# generate a path: 
+      path = [
+        node.successors[node_locations[0]]
+      ]
 
-      if game_tree.empty?
-        game_tree[board][first_wave.current_state][second_wave.current_state][third_wave.current_state][fourth_wave.current_state][fifth_wave.current_state][sixth_wave.current_state][seventh_wave.current_state][eigth_wave.current_state] = ninth_wave.current_state
-      else
-        path = tree
-
-        path[board][first_wave.current_state][second_wave.current_state][third_wave.current_state][fourth_wave.current_state][fifth_wave.current_state][sixth_wave.current_state][seventh_wave.current_state][eigth_wave.current_state] = ninth_wave.current_state
-
-        deep_merge!(game_tree, path)
+      node_locations.drop(1).each do |index|
+        node = path.pop
+        next_node = node.successors[node_locations[index]]
+        path.push(node, next_node)
       end
+
+#  evaluate path:
+      path.each_with_index.map do |state, index|
+        path = path[0..index] if state.losing? || state.winning?
+        
+      end
+
+binding.pry
+
+      # if game_tree.empty?
+      #   game_tree[board][first_wave.current_state][second_wave.current_state][third_wave.current_state][fourth_wave.current_state][fifth_wave.current_state][sixth_wave.current_state][seventh_wave.current_state][eigth_wave.current_state] = ninth_wave.current_state
+      # else
+      #   path = tree
+
+      #   path[board][first_wave.current_state][second_wave.current_state][third_wave.current_state][fourth_wave.current_state][fifth_wave.current_state][sixth_wave.current_state][seventh_wave.current_state][eigth_wave.current_state] = ninth_wave.current_state
+
+      #   deep_merge!(game_tree, path)
+      # end
     end
-    game_tree
+    # game_tree
   end
 
   attr_reader :node
@@ -46,12 +57,12 @@ class DirectedGraph
     end
   end
 
-  def index_combinations
-    index_combinations = []
+  def routes
+    routes = []
     board.each_with_index do |_pos, index|
-      index_combinations << [*0.. (board.length - (index + 1))]
+      routes << [*0.. (board.length - (index + 1))]
     end
-    index_combinations.first.product(*index_combinations[1..-1])
+    routes.first.product(*routes[1..-1])
   end
 
   def tree
