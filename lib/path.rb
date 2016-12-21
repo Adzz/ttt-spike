@@ -1,8 +1,8 @@
 class Path
-  def initialize
-    @tree = nil
-    @weight = nil
+  def initialize(nodes, weight)
+    @nodes = nodes
+    @weight = weight
   end
 
-  attr_accessor :weight, :tree
+  attr_reader :weight, :nodes
 end

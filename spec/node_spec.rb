@@ -56,4 +56,16 @@ RSpec.describe Node do
       end
     end
   end
+
+  context 'assesing current state' do
+    it "sets it's rank to minus 1 when losing" do
+      subject = described_class.new("O", ["X","X","X","O","O",6,7,8])
+      expect { subject.losing? }.to change { subject.rank }.from(0).to(-1)
+    end
+
+    it "winning_move_available works out if there is a winning move for a player" do
+      subject = described_class.new("X", ["X","X",2,"O","O",6,7,8])
+      expect { subject.winning_move_available? }.to change { subject.rank }.from(0).to(1)
+    end
+  end
 end

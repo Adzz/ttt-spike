@@ -1,60 +1,47 @@
 require 'pry'
+require 'path'
 
 class DirectedGraph
   def initialize(node)
     @node = node
-    @game_tree = tree
-    possibilities
+    @paths = []
   end
 
-  attr_reader :game_tree
+  def weighted_paths
+    routes.each do |route|
+      path = [
+        node.successors[route[0]]
+      ]
+
+      route[1..-1].each do |node_location|
+        first_node = path.pop
+        path.push(first_node)
+        next_node = first_node.successors[node_location]
+
+        if next_node.winning?
+          paths << Path.new(path, 100-path.length)
+          break
+        end
+
+        if next_node.losing?
+          paths << Path.new(path, -(100-path.length))
+          break
+        end
+
+        path.push(next_node)
+      end
+      paths << Path.new(path, 0)
+    end
+    binding.pry
+    paths
+  end
 
   private
 
-  def possibilities
-    [routes[0]].each do |node_locations|
-# generate a path: 
-      path = [
-        node.successors[node_locations[0]]
-      ]
-
-      node_locations.drop(1).each do |index|
-        node = path.pop
-        next_node = node.successors[node_locations[index]]
-        path.push(node, next_node)
-      end
-
-#  evaluate path:
-      path.each_with_index.map do |state, index|
-        path = path[0..index] if state.losing? || state.winning?
-        
-      end
-
-binding.pry
-
-      # if game_tree.empty?
-      #   game_tree[board][first_wave.current_state][second_wave.current_state][third_wave.current_state][fourth_wave.current_state][fifth_wave.current_state][sixth_wave.current_state][seventh_wave.current_state][eigth_wave.current_state] = ninth_wave.current_state
-      # else
-      #   path = tree
-
-      #   path[board][first_wave.current_state][second_wave.current_state][third_wave.current_state][fourth_wave.current_state][fifth_wave.current_state][sixth_wave.current_state][seventh_wave.current_state][eigth_wave.current_state] = ninth_wave.current_state
-
-      #   deep_merge!(game_tree, path)
-      # end
-    end
-    # game_tree
-  end
-
-  attr_reader :node
+  attr_reader :node, :paths
 
   def board
     node.current_state
-  end
-
-  def deep_merge!(into_this_hash, this_hash)
-    into_this_hash.merge!(this_hash) do |key, first_hash_value, second_hash_value|
-      deep_merge!(first_hash_value, second_hash_value)
-    end
   end
 
   def routes
@@ -63,11 +50,5 @@ binding.pry
       routes << [*0.. (board.length - (index + 1))]
     end
     routes.first.product(*routes[1..-1])
-  end
-
-  def tree
-    Hash.new do |hash, key|
-      hash[key] = tree
-    end
   end
 end

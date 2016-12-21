@@ -15,10 +15,9 @@ class Board
     STARTING_POSITIONS - [taken_positions]
   end
 
-  def winning_board?(board)
+  def winning_board?(board, player)
     WINNING_LINES.each do |line|
-      return true if board.values_at(*line) == ["X","X","X"] ||
-                     board.values_at(*line) == ["O","O","O"]
+      return true if board.values_at(*line) == [player, player, player]
     end
     false
   end
