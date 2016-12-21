@@ -18,13 +18,18 @@ class DirectedGraph
         path.push(first_node)
         next_node = first_node.successors[node_location]
 
-        if next_node.winning?
-          paths << Path.new(path, 100-path.length)
-          break
+        if first_node.can_win?
         end
 
-        if next_node.losing?
-          paths << Path.new(path, -(100-path.length))
+        if first_node.about_to_lose?
+        end
+
+        if next_node.lost?
+          if next_node.player == node.player
+            paths << Path.new(path, 100-path.length)
+          else
+            paths << Path.new(path, -(100-path.length))
+          end
           break
         end
 

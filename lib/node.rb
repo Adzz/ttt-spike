@@ -14,11 +14,9 @@ class Node
     validate_board(player, current_state)
     @player = player
     @current_state = current_state
-    @rank = 0
   end
-#  rank should be distance from a win
-  attr_reader :current_state
-  attr_accessor :rank
+
+  attr_reader :current_state, :player
 
   def successors
     @successors ||= current_state.each_with_index.with_object([]) do |(value, index), successors|
@@ -29,7 +27,7 @@ class Node
     end
   end
 
-  def winning?
+  def won?
     WINNING_LINES.each do |line|
       if current_state.values_at(*line) == [player, player, player]
         return true
@@ -40,7 +38,8 @@ class Node
 
   def winning_move_available?
     WINNING_LINES.each do |line|
-      if (current_state.values_at(*line) - [player]).count == 1
+      remaining_positions = current_state.values_at(*line) - [player]
+      if remaining_positions.count == 1 && remaining_positions[0].is_a? Numeric
         return true
       end
     end
@@ -49,14 +48,15 @@ class Node
 
   def about_to_lose?
     WINNING_LINES.each do |line|
-      if (current_state.values_at(*line) - [other_player]).count == 1
+      remaining_positions = current_state.values_at(*line) - [other_player]
+      if remaining_positions.count == 1 && remaining_positions[0].is_a? Numeric
         return true
       end
     end
     false
   end
 
-  def losing?
+  def lost?
     WINNING_LINES.each do |line|
       if current_state.values_at(*line) == [other_player, other_player, other_player]
         return true
@@ -70,8 +70,6 @@ class Node
   end
 
   private
-
-  attr_reader :player
 
   def validate_board(player, current_state)
     x_count = current_state.select { |x| x == "X" }.count
