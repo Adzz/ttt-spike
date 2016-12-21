@@ -36,10 +36,10 @@ class Node
     false
   end
 
-  def winning_move_available?
+  def can_win?
     WINNING_LINES.each do |line|
       remaining_positions = current_state.values_at(*line) - [player]
-      if remaining_positions.count == 1 && remaining_positions[0].is_a? Numeric
+      if remaining_positions.count == 1 && remaining_positions[0].is_a?(Numeric)
         return true
       end
     end
@@ -49,7 +49,7 @@ class Node
   def about_to_lose?
     WINNING_LINES.each do |line|
       remaining_positions = current_state.values_at(*line) - [other_player]
-      if remaining_positions.count == 1 && remaining_positions[0].is_a? Numeric
+      if remaining_positions.count == 1 && remaining_positions[0].is_a?(Numeric)
         return true
       end
     end

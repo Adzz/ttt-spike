@@ -19,13 +19,7 @@ class DirectedGraph
         next_node = first_node.successors[node_location]
 
         if first_node.can_win?
-        end
-
-        if first_node.about_to_lose?
-        end
-
-        if next_node.lost?
-          if next_node.player == node.player
+          if first_node.player == node.player
             paths << Path.new(path, 100-path.length)
           else
             paths << Path.new(path, -(100-path.length))
@@ -37,7 +31,6 @@ class DirectedGraph
       end
       paths << Path.new(path, 0)
     end
-    binding.pry
     paths
   end
 
@@ -51,8 +44,9 @@ class DirectedGraph
 
   def routes
     routes = []
-    board.each_with_index do |_pos, index|
-      routes << [*0.. (board.length - (index + 1))]
+    free_moves = (board - ["X"] - ["O"])
+    free_moves.each_with_index do |_pos, index|
+      routes << [*0.. (free_moves.length - (index + 1))]
     end
     routes.first.product(*routes[1..-1])
   end
