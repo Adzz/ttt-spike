@@ -1,62 +1,16 @@
-require 'pry'
-require 'path.rb'
-require 'player.rb'
+require 'directed_graph'
+require 'node'
 
-class AI_X
-  include Player
-
-  def initialize(game_tree)
-    @player = "X"
-    @game_tree = game_tree
-    @paths = []
+class AI
+  def initialize(player)
+    @player = player
   end
 
-  # def next_move(game_state)
-  #   return ["X",1,2,3,4,5,6,7,8] if game_state.count < 2
-  #   possible_moves = game_tree.dig(*game_state)
-  #   create_paths(possible_moves)
-  #   evaluate(paths)
-  #   binding.pry
-  # end
-
   def next_move(game_state)
-    return ["X",1,2,3,4,5,6,7,8] if game_state.count < 2
-    generate_possible_moves(game_state)
+    DirectedGraph.new(Node.new(player, game_state)).choose_move
   end
 
   private
 
-  def generate_possible_moves(game_state)
-    node = Node.new(player, game_state)
-    free_spaces = (board - ["X"] - ["O"]).count
-    free_spaces.times { node.successors }
-  end
-
-  def create_paths(possible_moves)
-    possible_moves.each do |key, value|
-      path = Path.new
-      path.tree= { key => value }
-      paths << path
-    end
-  end
-
-  def evaluate(paths)
-    paths.each do |path|
-      end_state = end_state(path.tree)
-      binding.pry
-      if winner?(end_state)
-        path.weight= 10 
-      elsif loser?(end_state)
-        path.weight= -10
-      else
-        path.weight= 0
-      end
-    end
-  end
-
-  def end_state(path_tree)
-    # get end state for each path
-  end
-
-  attr_reader :player, :game_tree, :paths
+  attr_reader :player
 end

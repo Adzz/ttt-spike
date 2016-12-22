@@ -14,5 +14,10 @@ RSpec.describe DirectedGraph do
     dg = described_class.new(Node.new("X", ["O","O",2,"X",4,"X",6,7,8]))
     expect(dg.choose_move).to eq ["O","O",2,"X","X","X",6,7,8]
   end
+
+  it "will chose a winning move over blocking an opponent's winning move" do
+    dg = described_class.new(Node.new("X", [0,1,2,3,4,5,6,7,8]))
+    expect(dg.choose_move).to eq ["X",1,2,3,4,5,6,7,8]
+  end
 end
 
