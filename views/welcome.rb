@@ -33,7 +33,12 @@ class Welcome
 
   def invite
     position_and_type_from_center("Welcome #{@name}, shall we play a game?")
-    position_and_type_from_center("y/n",-2)
+    @reply = getstr
+    if @reply == "Love to. How about Global Thermonuclear War?"
+      position_and_type_from_center("Wouldn't you prefer a nice game of Tic Tac Toe?",-4)
+    else
+      position_and_type_from_center("y/n",-2)
+    end
   end
 
   def end_game

@@ -22,5 +22,3 @@ class Board
     false
   end
 end
-
-

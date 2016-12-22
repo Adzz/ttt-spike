@@ -4,11 +4,15 @@ require 'path'
 class DirectedGraph
   def initialize(node)
     @node = node
-    @paths = []
+  end
+
+  def choose_move
+    return ["X",1,2,3,4,5,6,7,8] if node.current_state == [*0..8]
+    weighted_paths.sort.last.nodes.first.current_state
   end
 
   def weighted_paths
-    routes.each do |route|
+    routes.each_with_object([]) do |route, paths|
       path = [
         node.successors[route[0]]
       ]
@@ -31,12 +35,11 @@ class DirectedGraph
       end
       paths << Path.new(path, 0)
     end
-    paths
   end
 
   private
 
-  attr_reader :node, :paths
+  attr_reader :node
 
   def board
     node.current_state

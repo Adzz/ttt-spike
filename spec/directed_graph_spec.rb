@@ -4,16 +4,15 @@ require 'node'
 require 'pry'
 
 RSpec.describe DirectedGraph do
-  # context 'generating a game tree' do
-  #   it 'produces a game tree of all possible states for a given board' do
-  #     node = Node.new("X", [*0..8])
-  #     directed_graph = described_class.new(node)
-  #     expect(directed_graph.weighted_paths.map(&:weight)).to eq [-1]
-  #   end
-  # end
+ 
+  it 'suggests a winning move when there is a winning move to make.' do
+    dg = described_class.new(Node.new("X", ["O",1,"X","X",4,5,"X","O","O"]))
+    expect(dg.choose_move).to eq ["O",1,"X","X","X",5,"X","O","O"]
+  end
 
-  it 'blah' do
-    dg = described_class.new(Node.new("X", ["X","O","X","O",4,5,6,7,8]))
-    expect(dg.weighted_paths).to eq ["X","O","X","O",4,5,6,7,8]
+  it "will chose a winning move over blocking an opponent's winning move" do
+    dg = described_class.new(Node.new("X", ["O","O",2,"X",4,"X",6,7,8]))
+    expect(dg.choose_move).to eq ["O","O",2,"X","X","X",6,7,8]
   end
 end
+
