@@ -11,6 +11,7 @@ class Welcome < Window
     invite(name)
     answer = user_response
     evaluate(answer)
+    getch
   end
 
   private
@@ -20,13 +21,13 @@ class Welcome < Window
   end
 
   def get_name
-    position_and_type_from_center('',2)
+    position_and_type_from_center('',2,4)
   end
 
   def invite(name)
     window.clear
     window.refresh
-    position_and_type_from_center("Welcome #{name}, shall we play a game?",2)
+    position_and_type_from_center("Welcome #{name}, shall we play a game?", 4)
     position_and_type_from_center("")
   end
 

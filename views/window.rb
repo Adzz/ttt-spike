@@ -3,7 +3,7 @@ require 'curses'
 class Window
   include Curses
 
-  def initialize
+  def initialize(height=0, width=0, top=0, left=0)
     @window = Curses::Window.new(0,0,0,0)
     window.keypad = true
   end
@@ -31,7 +31,7 @@ class Window
 
   # the bigger the y_axis_offset, the further UP the cursor is from screen center
   # the bigger the x_axis_offset, the further RIGHT the cursor is from screen center
-  def position_and_type_from_center(content=[], y_axis_offset=0, x_axis_offset=0)
+  def position_and_type_from_center(content='', y_axis_offset=0, x_axis_offset=0)
     setpos((lines / 2) - y_axis_offset, ((cols - content.length) / 2) + x_axis_offset)
     type(content)
   end
