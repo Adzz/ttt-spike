@@ -5,7 +5,7 @@ class Window
 
   def initialize(height=0, width=0, top=0, left=0)
     @window = Curses::Window.new(0,0,0,0)
-    window.keypad = true
+    window.keypad(true)
   end
 
   def type(string)

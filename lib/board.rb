@@ -1,12 +1,16 @@
 class Board
   def initialize
     @board_lines = [
-      "   |    |   ",
-      "___|____|___",
-      "   |    |   ",
-      "___|____|___",
-      "   |    |   ",
-      "   |    |   "
+      "      |     |     ",
+      "      |     |     ",
+      " _____|_____|_____",
+      "      |     |     ",
+      "      |     |     ",
+      "      |     |     ",
+      " _____|_____|_____",
+      "      |     |     ",
+      "      |     |     ",
+      "      |     |     "
     ]
   end
 
@@ -15,7 +19,7 @@ class Board
   end
 
   def width
-     board_lines.first.length
+    board_lines.first.length
   end
 
   def board

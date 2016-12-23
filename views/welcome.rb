@@ -11,7 +11,6 @@ class Welcome < Window
     invite(name)
     answer = user_response
     evaluate(answer)
-    getch
   end
 
   private
@@ -34,9 +33,11 @@ class Welcome < Window
   def evaluate(answer)
     if answer.match(/.*(Global Thermonuclear War)|(Thermonuclear War).*/i)
       position_and_type_from_center("Wouldn't you prefer a nice game of Tic Tac Toe...",-4)
+      getch
       return true
     elsif !answer.match(/(no)|(nope)|(nah)/i)
       position_and_type_from_center("How about a nice game of Tic Tac Toe...", -4)
+      getch
       return true
     end
     false
