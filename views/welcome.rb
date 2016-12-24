@@ -4,13 +4,17 @@ class Welcome < Window
   WELCOME_STRING = "Hello stranger, what is your name?"
 
   def screen
-    window.refresh
-    welcome_message
-    get_name
-    name = user_response
-    invite(name)
-    answer = user_response
-    evaluate(answer)
+    begin
+      window.refresh
+      welcome_message
+      get_name
+      name = user_response
+      invite(name)
+      answer = user_response
+      evaluate(answer)
+    ensure
+      window.close
+    end
   end
 
   private

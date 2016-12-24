@@ -8,7 +8,7 @@ class Window
     stdscr.keypad(true)
   end
 
-  def type(string, speed=0)
+  def type(string, speed=0.01)
     string.split("").each do |char|
       addstr(char)
       refresh
@@ -31,7 +31,7 @@ class Window
 
   # the bigger the y_axis_offset, the further UP the cursor is from screen center
   # the bigger the x_axis_offset, the further RIGHT the cursor is from screen center
-  def position_and_type_from_center(content='', y_axis_offset=0, x_axis_offset=0, speed=0)
+  def position_and_type_from_center(content='', y_axis_offset=0, x_axis_offset=0, speed=0.01)
     setpos((lines / 2) - y_axis_offset, ((cols - content.length) / 2) + x_axis_offset)
     type(content, speed)
   end
