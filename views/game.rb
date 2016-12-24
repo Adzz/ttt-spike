@@ -2,31 +2,44 @@ require_relative 'window.rb'
 require_relative '../lib/board.rb'
 
 class Game < Window
+  def initialize
+    super
+    @position_x = cols / 2
+    @position_y = lines / 2
+  end
+
   def screen
-    window.refresh
+    window.noutrefresh
     noecho
     window.box("|", "-")
     box = box(60,"|","~")
-    window.refresh
+    window.noutrefresh
     draw_board
-    getch
-    command = getch
-    case command
-    when KEY_UP then move(0,-1)
-    when KEY_DOWN then move(0,1)
-    when KEY_RIGHT then move(1,0)
-    when KEY_LEFT then move(-1,0)
-    end
-    getstr
-  end
-# can scroll up instead of redrawing
-  private
 
-  def move(x,y)
-    @position_x = window.curx
-    @position_y = window.cury
-    setpos(@position_y+=x, @position_x+=y)
+    begin
+      while( true )
+        command = getch
+        case command
+        when Curses::Key::DOWN
+          @position_y += 4
+          setpos(@position_y, @position_x)
+        when Curses::Key::UP
+          @position_y -= 4
+          setpos(@position_y, @position_x)
+        when Curses::Key::RIGHT
+          @position_x += 6
+          setpos(@position_y, @position_x)
+        when Curses::Key::LEFT
+          @position_x -= 6
+          setpos(@position_y, @position_x)
+        end
+      end
+    ensure
+      window.close
+    end
   end
+
+  private
 
   def board
     @board ||= Board.new
@@ -41,6 +54,7 @@ class Game < Window
   def box(side, vertical_border, horizontal_border)
     box = window.subwin(side/2, side, ((lines-(side/2))/2), ((cols-side)/2))
     box.box(vertical_border, horizontal_border)
+
   end
 end
 
