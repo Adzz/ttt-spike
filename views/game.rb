@@ -17,7 +17,7 @@ class Game < Window
     draw_board
 
     begin
-      while( true )
+      while true
         command = getch
         case command
         when Curses::Key::DOWN
@@ -32,6 +32,8 @@ class Game < Window
         when Curses::Key::LEFT
           @position_x -= 6
           setpos(@position_y, @position_x)
+        when Curses::Key::BACKSPACE
+          addstr("X")
         end
       end
     ensure
