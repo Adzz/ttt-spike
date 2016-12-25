@@ -20,33 +20,24 @@ class Menu < Window
       end
       position_and_type_from_center(ONE_PLAYER,2)
       position_and_type_from_center(TWO_PLAYER)
-      
-      # while true
-      #   choice = getch
-      #   case choice
-      #   when Curses::Key::UP
-      #     position_and_type_from_center("==>", 2, - ONE_PLAYER.length + 1)
-      #   when Curses::Key::DOWN
-      #     position_and_type_from_center("==>", 0, - TWO_PLAYER.length + 9)
-      #   when ?q
-      #     break
-      #   end
-      # end
+      choose_game_type
     ensure
       window.close
     end
   end
 
-  def get_response
+  def choose_game_type
     response = getch
     if response == Curses::Key::DOWN
       position_and_type_from_center("==>", 0, - TWO_PLAYER.length + 9)
-      get_response
+      choose_game_type
     elsif response == Curses::Key::UP
       position_and_type_from_center("==>", 2, - ONE_PLAYER.length + 1)
-      get_response
-    elsif response == Curses::Key::ENTER
+      choose_game_type
+    elsif return_key.include?(response)
       return true
+    else
+      choose_game_type
     end
   end
 end

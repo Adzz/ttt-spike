@@ -8,16 +8,22 @@ class Window
     stdscr.keypad(true)
   end
 
+  def screen
+    raise NotImplementedError
+  end
+
+  private
+
+  def return_key
+    [KEY_ENTER, 10, 13]
+  end
+
   def type(string, speed=0.01)
     string.split("").each do |char|
       addstr(char)
       refresh
       sleep(speed)
     end
-  end
-
-  def screen
-    raise NotImplementedError
   end
 
   def user_response
@@ -35,8 +41,6 @@ class Window
     setpos((lines / 2) - y_axis_offset, ((cols - content.length) / 2) + x_axis_offset)
     type(content, speed)
   end
-
-  private
 
   attr_reader :window
 end

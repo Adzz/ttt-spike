@@ -6,7 +6,7 @@ require_relative 'views/menu.rb'
 require_relative 'views/game.rb'
 
 if Welcome.new.screen
-  # Menu.new.screen
+  Menu.new.screen
   Game.new.screen
 else
   Goodbye.new.screen
