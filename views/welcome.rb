@@ -1,7 +1,9 @@
 require_relative 'window.rb'
 
 class Welcome < Window
-  WELCOME_STRING = "Hello stranger, what is your name?"
+  WELCOME_STRING = "Hello stranger, what is your name?".freeze
+  PREFER = "Wouldn't you prefer a nice game of Tic Tac Toe...".freeze
+  NICE = "How about a nice game of Tic Tac Toe...".freeze
 
   def screen
     begin
@@ -36,11 +38,12 @@ class Welcome < Window
 
   def evaluate(answer)
     if answer.match(/.*(Global Thermonuclear War)|(Thermonuclear War).*/i)
-      position_and_type_from_center("Wouldn't you prefer a nice game of Tic Tac Toe...",-4)
+      position_and_type_from_center(PREFER ,-4)
       getch
       return true
-    elsif !answer.match(/(no)|(nope)|(nah)/i)
-      position_and_type_from_center("How about a nice game of Tic Tac Toe...", -4)
+    end
+    unless answer.match(/.*(no)|(nope)|(nah).*/i)
+      position_and_type_from_center(NICE, -4)
       getch
       return true
     end

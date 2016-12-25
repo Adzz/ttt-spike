@@ -1,9 +1,10 @@
 require_relative 'window.rb'
-
+# wrap the curses methods in better more ruby-esque method names?
 class Menu < Window
-  MENU_HEADING = "Choose Game Type"
-  ONE_PLAYER   = "Go Solo"
-  TWO_PLAYER   = "It's better with friends..."
+  MENU_HEADING = "Choose Game Type".freeze
+  ONE_PLAYER   = "1. Go Solo".freeze
+  TWO_PLAYER   = "2. It's better with friends...".freeze
+  ARROW        = "==> ".freeze
 
   def initialize
     super
@@ -16,28 +17,34 @@ class Menu < Window
       window.refresh
       noecho
       attron(color_pair(COLOR_BLUE)|A_BOLD) do
-        position_and_type_from_center(MENU_HEADING,7)
+        position_and_type_from_center(MENU_HEADING, 7)
       end
-      position_and_type_from_center(ONE_PLAYER,2)
+      position_and_type_from_center(ONE_PLAYER, 2)
       position_and_type_from_center(TWO_PLAYER)
-      choose_game_type
+      game_type < 50 ? true : false
     ensure
       window.close
     end
   end
 
-  def choose_game_type
+  private
+
+  def game_type
     response = getch
     if response == Curses::Key::DOWN
-      position_and_type_from_center("==>", 0, - TWO_PLAYER.length + 9)
-      choose_game_type
+      position_and_type_from_center(ARROW, 0, x_offset(TWO_PLAYER, ARROW))
+      game_type
     elsif response == Curses::Key::UP
-      position_and_type_from_center("==>", 2, - ONE_PLAYER.length + 1)
-      choose_game_type
+      position_and_type_from_center(ARROW, 2, x_offset(ONE_PLAYER, ARROW))
+      game_type
     elsif return_key.include?(response)
-      return true
+      return inch()
     else
-      choose_game_type
+      game_type
     end
+  end
+
+  def x_offset(text, arrow)
+    -(text.length/2 + (arrow.length/2))
   end
 end

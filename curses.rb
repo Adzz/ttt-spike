@@ -4,10 +4,18 @@ require_relative 'views/welcome.rb'
 require_relative 'views/goodbye.rb'
 require_relative 'views/menu.rb'
 require_relative 'views/game.rb'
+require_relative 'views/game/one_player_game.rb'
+require_relative 'views/game/two_player_game.rb'
 
-if Welcome.new.screen
-  Menu.new.screen
-  Game.new.screen
-else
+unless Welcome.new.screen
   Goodbye.new.screen
+  exit
 end
+
+case Menu.new.screen
+when true
+  OnePlayerGame.new.screen
+when false
+  TwoPlayerGame.new.screen
+end
+# Game.new.screen
