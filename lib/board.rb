@@ -1,5 +1,6 @@
-require 'pry'
 class Board
+  attr_reader :state
+
   def initialize
     @state = [*0..8]
     @visual_board_lines = [
@@ -39,7 +40,7 @@ class Board
 
   private
 
-  attr_reader :state, :visual_board_lines
+  attr_reader :visual_board_lines
 
   def cells
     @cells ||= [

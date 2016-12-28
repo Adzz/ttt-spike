@@ -9,8 +9,8 @@ class OnePlayerGame < Window
     @board = Board.new
     @player = player
     @computer = AI.new(other_player)
-    @position_x = screen_columns / 2
-    @position_y = screen_rows / 2
+    @position_x = x_midpoint
+    @position_y = y_midpoint
   end
 
   def screen
@@ -20,8 +20,7 @@ class OnePlayerGame < Window
       window.box("|", "-")
       draw_box(60,"|","~")
       window.noutrefresh
-      render_board
-      next_move
+      start_new_game
       getch
     ensure
       window.close
@@ -30,36 +29,54 @@ class OnePlayerGame < Window
 
   private
 
+  def start_new_game
+    [*0..8].each { |pos| board.update_state(pos, pos) }
+    render_board
+    window.noutrefresh
+    player_move if player == "X"
+    computer_move if player == "O"
+  end
+
   attr_reader :board, :player, :computer
 
-  def next_move
+  def player_move
     command = getch
     if command == Curses::Key::DOWN
       @position_y += 4
       setpos(@position_y, @position_x)
-      next_move
+      player_move
     elsif command == Curses::Key::UP
       @position_y -= 4
       setpos(@position_y, @position_x)
-      next_move
+      player_move
     elsif command == Curses::Key::RIGHT
       @position_x += 6
       setpos(@position_y, @position_x)
-      next_move
+      player_move
     elsif command == Curses::Key::LEFT
       @position_x -= 6
       setpos(@position_y, @position_x)
-      next_move
+      player_move
     elsif return_key.include?(command)
-      next_move unless cursor_within_board?
-      board.update_state(cursor_position, player)
+      player_move unless cursor_within_board?
+      board.update_state(cursor_position_on_board, player)
       render_board
-      next_move
+      computer_move
     elsif command == ?q
       exit
+    elsif command == ?r
+      start_new_game
     else
-      next_move
+      player_move
     end
+  end
+
+  def computer_move
+    next_state = computer.move(board.state)
+    position = (board.state - next_state).first
+    board.update_state(position, other_player)
+    render_board
+    player_move
   end
 
   def other_player
@@ -70,21 +87,21 @@ class OnePlayerGame < Window
     cells.include?([@position_y, @position_x])
   end
 
-  def cursor_position
+  def cursor_position_on_board
     cells.rindex { |cell| cell == [@position_y, @position_x] }
   end
 
   def cells
     [
-      [((screen_rows / 2) - 4), ((screen_columns / 2) - 6)],
-      [((screen_rows / 2) - 4), (screen_columns / 2)],
-      [((screen_rows / 2) - 4), ((screen_columns / 2) + 6)],
-      [(screen_rows / 2), ((screen_columns / 2) - 6)],
-      [(screen_rows / 2), (screen_columns / 2)],
-      [(screen_rows / 2), ((screen_columns / 2) + 6)],
-      [((screen_rows / 2) + 4), ((screen_columns / 2) - 6)],
-      [((screen_rows / 2) + 4), (screen_columns / 2)],
-      [((screen_rows / 2) + 4), ((screen_columns / 2) + 6)]
+      [ y_midpoint - 4, x_midpoint - 6 ],
+      [ y_midpoint - 4, x_midpoint ],
+      [ y_midpoint - 4, x_midpoint + 6 ],
+      [ y_midpoint, x_midpoint - 6 ],
+      [ y_midpoint, x_midpoint ],
+      [ y_midpoint, x_midpoint + 6 ],
+      [ y_midpoint + 4, x_midpoint - 6 ],
+      [ y_midpoint + 4, x_midpoint ],
+      [ y_midpoint + 4, x_midpoint + 6 ]
     ]
   end
 

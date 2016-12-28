@@ -6,7 +6,7 @@ class AI
     @player = player
   end
 
-  def next_move(game_state)
+  def move(game_state)
     DirectedGraph.new(Node.new(player, game_state)).choose_move
   end
 

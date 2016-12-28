@@ -16,7 +16,7 @@ class PlayerSelection < Window
   private
 
   def player
-    choose_selection == 116 ? "O" : "X"
+    choose_selection == 79 ? "O" : "X"
   end
 
   def choose_selection

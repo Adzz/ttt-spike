@@ -22,6 +22,14 @@ class Window
     Curses.cols
   end
 
+  def y_midpoint
+    screen_rows / 2
+  end
+
+  def x_midpoint
+    screen_columns / 2
+  end
+
   def return_key
     [KEY_ENTER, 10, 13]
   end
