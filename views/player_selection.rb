@@ -6,7 +6,7 @@ class PlayerSelection < Window
     begin
       window.refresh
       noecho
-      display_selections
+      display_options
       player
     ensure
       window.close
@@ -34,7 +34,7 @@ class PlayerSelection < Window
     end
   end
 
-  def display_selections
+  def display_options
     attron(color_pair(COLOR_BLUE)|A_BOLD) do
       position_and_type_from_center("X", 0, -2)
       position_and_type_from_center("O", 0, 2)

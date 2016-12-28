@@ -1,5 +1,4 @@
-require 'pry'
-require 'path'
+require_relative 'path'
 
 class DirectedGraph
   def initialize(node)

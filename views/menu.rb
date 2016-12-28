@@ -1,6 +1,5 @@
 require_relative 'window.rb'
-# wrap the curses methods in better more ruby-esque method names?
-# command pattern for entering commands?
+
 class Menu < Window
   MENU_HEADING = "Choose Game Type".freeze
   ONE_PLAYER   = "1. Go Solo".freeze

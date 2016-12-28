@@ -14,6 +14,14 @@ class Window
 
   private
 
+  def screen_rows
+    Curses.lines
+  end
+
+  def screen_columns
+    Curses.cols
+  end
+
   def return_key
     [KEY_ENTER, 10, 13]
   end

@@ -1,5 +1,5 @@
-require 'directed_graph'
-require 'node'
+require_relative 'directed_graph.rb'
+require_relative 'node.rb'
 
 class AI
   def initialize(player)
