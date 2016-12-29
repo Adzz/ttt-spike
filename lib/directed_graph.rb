@@ -7,7 +7,9 @@ class DirectedGraph
 
   def choose_move
     return ["X",1,2,3,4,5,6,7,8] if node.current_state == [*0..8]
-    weighted_paths.sort.last.nodes.first.current_state
+    batched_paths.max_by do |_key, value|
+      value.map(&:weight).inject(:+)
+    end.first
   end
 
   def weighted_paths
@@ -16,7 +18,7 @@ class DirectedGraph
       path = [
         node.successors[route[0]]
       ]
-      
+
       path_weight = 10 
 
       route.drop(1).each do |node_location|
@@ -24,11 +26,18 @@ class DirectedGraph
         path.push(first_node)
         next_node = first_node.successors[node_location]
 
-        if first_node.can_win?
+        if first_node.won?
           if first_node.player == node.player
-            path_weight = 100 - path.length
+            path_weight = 100 - (path.length * 10)
           else
-            path_weight = - (100 - path.length)
+            path_weight = - (100 - (path.length * 10))
+          end
+          break
+        elsif first_node.lost?
+          if first_node.player == node.player
+            path_weight = - (100 - (path.length * 10))
+          else
+            path_weight = 100 - (path.length * 10)
           end
           break
         else
@@ -54,5 +63,11 @@ class DirectedGraph
       routes << [*0.. (free_moves.length - (index + 1))]
     end
     routes.first.product(*routes[1..-1])
+  end
+
+  def batched_paths
+    weighted_paths.group_by do |path|
+      path.nodes.first.current_state
+    end
   end
 end
