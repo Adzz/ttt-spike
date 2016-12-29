@@ -36,26 +36,6 @@ class Node
     false
   end
 
-  def can_win?
-    WINNING_LINES.each do |line|
-      remaining_positions = current_state.values_at(*line) - [player]
-      if remaining_positions.count == 1 && remaining_positions[0].is_a?(Numeric)
-        return true
-      end
-    end
-    false
-  end
-
-  def about_to_lose?
-    WINNING_LINES.each do |line|
-      remaining_positions = current_state.values_at(*line) - [other_player]
-      if remaining_positions.count == 1 && remaining_positions[0].is_a?(Numeric)
-        return true
-      end
-    end
-    false
-  end
-
   def lost?
     WINNING_LINES.each do |line|
       if current_state.values_at(*line) == [other_player, other_player, other_player]
@@ -63,10 +43,6 @@ class Node
       end
     end
     false
-  end
-
-  def drawing?
-    (current_state - ["X"] - ["O"]).empty? && !losing(current_state) && !winning?(current_state)
   end
 
   private

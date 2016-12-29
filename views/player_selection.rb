@@ -22,10 +22,10 @@ class PlayerSelection < Window
   def choose_selection
     response = getch
     if response == Curses::Key::LEFT
-      position_and_type_from_center("", 0, -2)
+      position_and_type_from_center("", 0, -3)
       choose_selection
     elsif response == Curses::Key::RIGHT
-      position_and_type_from_center("", 0, 2)
+      position_and_type_from_center("", 0, 1)
       choose_selection
     elsif return_key.include?(response)
       return inch()
@@ -36,6 +36,7 @@ class PlayerSelection < Window
 
   def display_options
     attron(color_pair(COLOR_BLUE)|A_BOLD) do
+      position_and_type_from_center("Select Your Character:", 2)
       position_and_type_from_center("X", 0, -2)
       position_and_type_from_center("O", 0, 2)
     end
