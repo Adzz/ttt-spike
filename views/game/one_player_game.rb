@@ -21,7 +21,6 @@ class OnePlayerGame < Window
       draw_box(60,"|","~")
       window.noutrefresh
       start_new_game
-      getch
     ensure
       window.close
     end
@@ -30,7 +29,7 @@ class OnePlayerGame < Window
   private
 
   def start_new_game
-    [*0..8].each { |pos| board.update_state(pos, pos) }
+    @board = Board.new
     render_board
     window.noutrefresh
     player_move if player == "X"
@@ -40,6 +39,7 @@ class OnePlayerGame < Window
   attr_reader :board, :player, :computer
 
   def player_move
+    #win screen if game_over?
     command = getch
     if command == Curses::Key::DOWN
       @position_y += 4
@@ -72,12 +72,14 @@ class OnePlayerGame < Window
   end
 
   def computer_move
+    # if game_over?
     next_state = computer.move(board.state)
     position = (board.state - next_state).first
     board.update_state(position, other_player)
     render_board
     player_move
   end
+
 
   def other_player
     player == "X" ? "O" : "X"

@@ -1,7 +1,8 @@
 require_relative 'window.rb'
 
 class PlayerSelection < Window
-
+  SELECTION = "Choose Your Character"
+  
   def screen
     begin
       window.refresh
@@ -36,9 +37,10 @@ class PlayerSelection < Window
 
   def display_options
     attron(color_pair(COLOR_BLUE)|A_BOLD) do
-      position_and_type_from_center("Select Your Character:", 2)
+      position_and_type_from_center(SELECTION, 2)
       position_and_type_from_center("X", 0, -2)
       position_and_type_from_center("O", 0, 2)
+      position_and_type_from_center("", 0, -3)
     end
   end
 end
