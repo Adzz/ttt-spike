@@ -16,7 +16,7 @@ class TwoPlayerGame < Window
       window.box("|", "-")
       draw_box(60,"|","~")
       window.noutrefresh
-      draw_board
+      render_board
       move_cursor
     ensure
       window.close
@@ -60,9 +60,9 @@ class TwoPlayerGame < Window
     end
   end
 
-  def draw_board
-    board.board_lines.each_with_index do |board_line, index|
-      position_and_type_from_center(board_line, (board.height/2)-index)
+  def render_board
+    board.renderable_board.each_with_index do |board_line, index|
+      position_and_type_from_center(board_line, (board.height/2)-index,0,0)
     end
   end
 

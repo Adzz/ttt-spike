@@ -3,7 +3,10 @@ require_relative '../../lib/board.rb'
 require_relative '../../lib/ai.rb'
 
 class OnePlayerGame < Window
-
+# Screen, this class is the reciever.
+# the client is the thing that contains the context;
+# gets the input of the user and at the right time uses the invoker to
+# invoke the command at the right time.
   def initialize(player)
     super
     @board = Board.new
@@ -39,7 +42,7 @@ class OnePlayerGame < Window
   attr_reader :board, :player, :computer
 
   def player_move
-    #win screen if game_over?
+    #gameover screen if game_over?
     command = getch
     if command == Curses::Key::DOWN
       @position_y += 4
@@ -63,12 +66,19 @@ class OnePlayerGame < Window
       render_board
       computer_move
     elsif command == ?q
-      exit
+      place_mark
     elsif command == ?r
       start_new_game
     else
       player_move
     end
+  end
+
+  def place_mark
+    player_move unless cursor_within_board?
+    board.update_state(cursor_position_on_board, player)
+    render_board
+    computer_move
   end
 
   def computer_move
@@ -79,7 +89,6 @@ class OnePlayerGame < Window
     render_board
     player_move
   end
-
 
   def other_player
     player == "X" ? "O" : "X"

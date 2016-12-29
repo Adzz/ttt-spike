@@ -1,4 +1,5 @@
 require 'pry'
+
 class Board
   WINNING_LINES = [
     [0,1,2],
@@ -51,15 +52,6 @@ class Board
   end
 
   def winning_board_for?(player)
-    WINNING_LINES.each do |line|
-      if state.values_at(*line) == [player, player, player]
-        return true
-      end
-    end
-    false
-  end
-
-  def losing_board_for?(player)
     WINNING_LINES.each do |line|
       if state.values_at(*line) == [player, player, player]
         return true

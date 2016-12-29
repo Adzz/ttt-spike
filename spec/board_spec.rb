@@ -24,7 +24,7 @@ RSpec.describe Board do
       ]
     end
 
-    it 'generates a string representation of the board state' do
+    it 'generates a representation of the board state that can be rendered' do
       expect(subject.renderable_board).to eq renderable_board
     end
 
@@ -99,7 +99,7 @@ RSpec.describe Board do
 
     context 'when player is O' do
       let(:player) { "O" }
-      
+
       it 'returns true if O take the top row' do
         board = Board.new(["O","O","O",3,4,5,6,7,8])
         expect(board.winning_board_for?(player)).to be true
