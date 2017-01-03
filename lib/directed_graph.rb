@@ -7,7 +7,7 @@ class DirectedGraph
 
   def choose_move
     return ["X",1,2,3,4,5,6,7,8] if node.current_state == [*0..8]
-    max_score
+    best_move
   end
 
   def weighted_paths
@@ -50,7 +50,7 @@ class DirectedGraph
 
   attr_reader :node
 
-  def max_score
+  def best_move
     grouped_paths.max_by do |_key, value|
       value.map(&:weight).inject(&:+)
     end.first
