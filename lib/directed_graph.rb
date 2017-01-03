@@ -17,25 +17,25 @@ class DirectedGraph
         node.successors[route[0]]
       ]
 
-      path_weight = 0 
+      path_weight = 0
 
       route.drop(1).each do |node_location|
         first_node = path.pop
         path.push(first_node)
         next_node = first_node.successors[node_location]
 
-        if first_node.won? || next_node.lost?
+        if first_node.lost? || next_node.won?
           if first_node.player == node.player
-            path_weight = 100 - path.length
-          else
             path_weight = - (100 - path.length)
+          else
+            path_weight = 100 - path.length
           end
           break
-        elsif first_node.lost? || next_node.won?
+        elsif first_node.won? || next_node.lost?
           if first_node.player == node.player
-            path_weight = - (100 - path.length)
-          else
             path_weight = 100 - path.length
+          else
+            path_weight = - (100 - path.length)
           end
           break
         else
