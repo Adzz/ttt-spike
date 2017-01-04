@@ -1,63 +1,66 @@
-require_relative 'path'
-
 class DirectedGraph
+  PATH = Struct.new(:nodes, :weight) do
+    def initialize(*)
+        super
+        self.weight ||= 0
+    end
+  end
+
   def initialize(node)
     @node = node
   end
 
   def choose_move
     return ["X",1,2,3,4,5,6,7,8] if node.current_state == [*0..8]
-    best_move
-  end
 
-  def weighted_paths
-    routes.each_with_object([]) do |route, paths|
-
-      path = [
-        node.successors[route[0]]
-      ]
-
-      path_weight = 0
-
-      route.drop(1).each do |node_location|
-        first_node = path.pop
-        path.push(first_node)
-        next_node = first_node.successors[node_location]
-
-        if first_node.lost? || next_node.won?
-          if first_node.player == node.player
-            path_weight = - (100 - path.length)
-          else
-            path_weight = 100 - path.length
-          end
-          break
-        elsif first_node.won? || next_node.lost?
-          if first_node.player == node.player
-            path_weight = 100 - path.length
-          else
-            path_weight = - (100 - path.length)
-          end
-          break
-        else
-          path.push(next_node)
-        end
-      end
-      paths << Path.new(path, path_weight)
-    end
+    grouped_paths.max_by do |_key, value|
+      value.map(&:weight).inject(&:+)
+    end.first
   end
 
   private
 
   attr_reader :node
 
-  def best_move
-    grouped_paths.max_by do |_key, value|
-      value.map(&:weight).inject(&:+)
-    end.first
+  def grouped_paths
+    weighted_paths.group_by do |path|
+      path.nodes.first.current_state
+    end
   end
 
-  def board
-    node.current_state
+  def weighted_paths
+    routes.each_with_object([]) do |route, paths|
+
+      nodes = [
+        node.successors[route.first]
+      ]
+
+      route.drop(1).each do |node_location|
+        first_node = nodes.pop
+        nodes.push(first_node)
+        next_node = first_node.successors[node_location]
+
+        if first_node.lost?
+          if first_node.player == node.player
+            paths << PATH.new(nodes, -(100 - nodes.length))
+          else
+            paths << PATH.new(nodes, 100 - nodes.length)
+          end
+          break
+        elsif first_node.won? || next_node.lost?
+          if first_node.player == node.player
+            paths << PATH.new(nodes, 100 - nodes.length)
+          else
+            paths << PATH.new(nodes, - (100 - nodes.length))
+          end
+          break
+        else
+          nodes.push(next_node)
+        end
+      end
+      
+      paths << PATH.new(nodes)
+    end
   end
 
   def routes
@@ -69,9 +72,7 @@ class DirectedGraph
     routes.first.product(*routes[1..-1])
   end
 
-  def grouped_paths
-    weighted_paths.group_by do |path|
-      path.nodes.first.current_state
-    end
+  def board
+    node.current_state
   end
 end

@@ -1,8 +1,8 @@
 class Path
-  def initialize(nodes, weight)
+  def initialize(nodes, weight=0)
     @nodes = nodes
     @weight = weight
   end
 
-  attr_reader :weight, :nodes
+  attr_reader :nodes, :weight
 end
