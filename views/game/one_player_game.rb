@@ -66,7 +66,7 @@ class OnePlayerGame < Window
       render_board
       computer_move
     elsif command == ?q
-      place_mark
+      exit
     elsif command == ?r
       start_new_game
     else

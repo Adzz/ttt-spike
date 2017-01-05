@@ -2,6 +2,7 @@ class DirectedGraph
   PATH = Struct.new(:nodes, :weight) do
     def initialize(*)
         super
+        self.nodes ||= []
         self.weight ||= 0
     end
   end
@@ -35,31 +36,33 @@ class DirectedGraph
         node.successors[route.first]
       ]
 
+      path = PATH.new
+
       route.drop(1).each do |node_location|
         first_node = nodes.pop
         nodes.push(first_node)
-        next_node = first_node.successors[node_location]
+        next_node = first_node.successors[node_location] 
 
         if first_node.lost?
-          if first_node.player == node.player
-            paths << PATH.new(nodes, -(100 - nodes.length))
-          else
-            paths << PATH.new(nodes, 100 - nodes.length)
-          end
+          path.weight= (100 - nodes.length)
           break
-        elsif first_node.won? || next_node.lost?
-          if first_node.player == node.player
-            paths << PATH.new(nodes, 100 - nodes.length)
+        elsif first_node.won? 
+          path.weight= (- (100 - nodes.length)) 
+          break
+        elsif next_node.lost? 
+          if first_node.player == node.player 
+            path.weight= (100 - nodes.length) 
           else
-            paths << PATH.new(nodes, - (100 - nodes.length))
+            path.weight= (- (100 - nodes.length)) 
           end
           break
         else
           nodes.push(next_node)
         end
       end
-      
-      paths << PATH.new(nodes)
+
+      path.nodes= nodes
+      paths << path
     end
   end
 
