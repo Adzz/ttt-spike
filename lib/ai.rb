@@ -1,5 +1,5 @@
-require_relative 'directed_graph.rb'
-require_relative 'node.rb'
+require_relative 'game_tree.rb'
+require_relative 'game_state.rb'
 require_relative 'board.rb'
 
 class AI
@@ -8,7 +8,7 @@ class AI
   end
 
   def move(game_state)
-    DirectedGraph.new(Node.new(player, Board.new(game_state))).choose_move
+    GameTree.new(GameState.new(player, Board.new(game_state))).choose_move
   end
 
   private

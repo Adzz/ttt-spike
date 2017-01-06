@@ -1,4 +1,4 @@
-class Node
+class GameState
   def initialize(player, board)
     @player = player
     @board = board
@@ -16,7 +16,7 @@ class Node
       next unless value.is_a? Numeric
       possible_next_move = current_state.dup
       possible_next_move[index] = player
-      successors << Node.new(other_player, Board.new(possible_next_move))
+      successors << GameState.new(other_player, Board.new(possible_next_move))
     end
   end
 
