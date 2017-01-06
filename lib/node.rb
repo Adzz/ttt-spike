@@ -28,6 +28,10 @@ class Node
     board.winning_board_for?(other_player)
   end
 
+  def game_over?
+    won? || lost? || (current_state - [player] - [other_player]).count == 0
+  end
+
   private
 #  this should be run everytime we change a board's state, probably in the board class?
   def validate_board(player, current_state)
