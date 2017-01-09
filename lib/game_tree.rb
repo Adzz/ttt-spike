@@ -1,4 +1,6 @@
 class GameTree
+  # This class should ONLY generate the game tree.
+  # The AI class should choose the best move.
   PATH = Struct.new(:game_states, :weight) do
     def initialize(*)
         super
@@ -9,24 +11,6 @@ class GameTree
 
   def initialize(game_state)
     @game_state = game_state
-  end
-
-  def choose_move
-    return ["X",1,2,3,4,5,6,7,8] if game_state.current_state == [*0..8]
-
-    grouped_paths.max_by do |_key, value|
-      value.map(&:weight).inject(&:+)
-    end.first
-  end
-
-  private
-
-  attr_reader :game_state
-
-  def grouped_paths
-    weighted_paths.group_by do |path|
-      path.game_states.first.current_state
-    end
   end
 
   def weighted_paths
@@ -66,6 +50,25 @@ class GameTree
       paths << evaluate(generated_path(game_states, PATH.new, route))
     end
   end
+
+  def choose_move
+    return ["X",1,2,3,4,5,6,7,8] if game_state.current_state == [*0..8]
+
+    grouped_paths.max_by do |_key, value|
+      value.map(&:weight).inject(&:+)
+    end.first
+  end
+
+  private
+
+  attr_reader :game_state
+
+  def grouped_paths
+    weighted_paths.group_by do |path|
+      path.game_states.first.current_state
+    end
+  end
+
 
   def generated_path(game_states, path, route, iterator=1)
     first_game_state = game_states.pop
