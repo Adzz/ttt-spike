@@ -51,8 +51,8 @@ class Window
     response
   end
 
-  # the bigger the y_axis_offset, the further UP the cursor is from screen center
-  # the bigger the x_axis_offset, the further RIGHT the cursor is from screen center
+  # the greater the y_axis_offset, the further UP the cursor is from screen center
+  # the greater the x_axis_offset, the further RIGHT the cursor is from screen center
   def position_and_type_from_center(content='', y_axis_offset=0, x_axis_offset=0, speed=0.01)
     setpos((lines / 2) - y_axis_offset, ((cols - content.length) / 2) + x_axis_offset)
     type(content, speed)
