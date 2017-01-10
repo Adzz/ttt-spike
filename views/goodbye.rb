@@ -1,19 +1,20 @@
-require_relative 'window.rb'
+require_relative 'curses_wrapper.rb'
 
-class Goodbye < Window
+class Goodbye
+
+  def initialize
+    @curses = CursesWrapper::Screen.new
+  end
 
   def screen
-    begin
-      window.refresh
-      position_and_type_from_center("Too Bad....")
-      window.getch
-      close_screen
-    ensure
-      window.close
+    curses.display do
+      curses.refresh
+      curses.position_and_type_from_center("Too Bad....")
+      curses.get_char
     end
   end
 
   private
 
-  attr_reader :window
+  attr_reader :curses
 end

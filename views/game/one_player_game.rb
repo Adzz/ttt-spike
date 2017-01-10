@@ -1,14 +1,15 @@
-require_relative '../window.rb'
+require_relative '../screen.rb'
 require_relative '../../lib/board.rb'
 require_relative '../../lib/ai.rb'
 
-class OnePlayerGame < Window
+class OnePlayerGame
 # Screen, this class is the reciever.
 # the client is the thing that contains the context;
 # gets the input of the user and at the right time uses the invoker to
 # invoke the command at the right time.
   def initialize(player)
     super
+    @window = Screen.new
     @board = Board.new
     @player = player
     @computer = AI.new(other_player)
@@ -39,7 +40,7 @@ class OnePlayerGame < Window
     computer_move if player == "O"
   end
 
-  attr_reader :board, :player, :computer
+  attr_reader :board, :player, :computer, :window
 
   def player_move
     #gameover screen if game_over?

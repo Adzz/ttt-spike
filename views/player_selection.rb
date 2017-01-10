@@ -1,8 +1,12 @@
-require_relative 'window.rb'
+require_relative 'screen.rb'
 
-class PlayerSelection < Window
+class PlayerSelection
   SELECTION = "Choose Your Character"
-  
+
+  def initialize(screen)
+    @window = Screen.new
+  end
+
   def screen
     begin
       window.refresh
@@ -15,6 +19,8 @@ class PlayerSelection < Window
   end
 
   private
+
+  attr_reader :window
 
   def player
     choose_selection == 79 ? "O" : "X"

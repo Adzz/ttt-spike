@@ -1,9 +1,10 @@
-require_relative '../window.rb'
+require_relative '../screen.rb'
 require_relative '../../lib/board.rb'
 
-class TwoPlayerGame < Window
+class TwoPlayerGame
   def initialize
     super
+    @window = Screen.new
     @board = Board.new
     @position_x = cols / 2
     @position_y = lines / 2
@@ -25,7 +26,7 @@ class TwoPlayerGame < Window
 
   private
 
-  attr_reader :board
+  attr_reader :board, :window
 
   def move_cursor
     while true
