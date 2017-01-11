@@ -4,13 +4,10 @@ require 'pry'
 module CursesWrapper
   class Screen
     include Curses
-    ONE = 49
 
-    def initilaize(height=0, width=0, top=0, left=0)
+    def initialize(height=0, width=0, top=0, left=0)
       @window = Curses::Window.new(0,0,0,0)
     end
-
-    attr_reader :window
 
     def display(&block)
       begin
@@ -25,29 +22,45 @@ module CursesWrapper
       end
     end
 
-    def bold_type(&block)
-      Curses.attron(color_pair(COLOR_BLUE)|A_BOLD) do
-        yield
+    def bold_type(text=nil,&block)
+      window.attron(color_pair(COLOR_BLUE)|A_BOLD) do
+        text || yield
       end
+    end
+
+    def sub_window(height, width, top, left)
+      window.subwin(height, width, top, left)
     end
 
     def silent_keys
       Curses.noecho
     end
 
+    def add_border(vertical_border, horizontal_border)
+      window.box(vertical_border, horizontal_border)
+    end
+
     def clear
       Curses.clear
     end
 
+    def delete_char_under_cursor
+      Curses.delch
+    end
+
+    def insert_char_before_cursor(char)
+      Curses.insch(char)
+    end
+
     def refresh
-      Curses.refresh
+      window.noutrefresh
     end
 
     def char_under_cursor
       Curses.inch()
     end
 
-    def get_char
+    def get_command
       Curses.getch
     end
 
@@ -96,5 +109,9 @@ module CursesWrapper
       )
       type(content, speed)
     end
+
+    private
+
+    attr_reader :window
   end
 end

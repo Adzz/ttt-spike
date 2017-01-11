@@ -1,4 +1,4 @@
-require_relative '../screen.rb'
+require_relative '../../lib/curses/screen.rb'
 require_relative '../../lib/board.rb'
 require_relative '../../lib/ai.rb'
 

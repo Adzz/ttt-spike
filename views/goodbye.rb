@@ -1,20 +1,21 @@
-require_relative 'curses_wrapper.rb'
+require_relative '../lib/curses/screen.rb'
 
 class Goodbye
+  extend Forwardable
 
   def initialize
     @curses = CursesWrapper::Screen.new
   end
 
   def screen
-    curses.display do
-      curses.refresh
-      curses.position_and_type_from_center("Too Bad....")
-      curses.get_char
+    display do
+      refresh
+      position_and_type_from_center("Too Bad....")
+      sleep(2)
     end
   end
 
   private
 
-  attr_reader :curses
+  def_delegators :@curses, :display, :position_and_type_from_center, :refresh
 end

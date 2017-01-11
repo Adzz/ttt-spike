@@ -1,4 +1,4 @@
-require_relative 'curses_wrapper'
+require_relative '../lib/curses/screen.rb'
 
 class PlayerSelection
   SELECTION = "Choose Your Character"

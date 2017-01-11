@@ -1,62 +1,64 @@
-require_relative '../screen.rb'
+require_relative '../../lib/curses/screen.rb'
 require_relative '../../lib/board.rb'
 
 class TwoPlayerGame
+  extend Forwardable
+
   def initialize
-    super
-    @window = Screen.new
+    @curses = CursesWrapper::Screen.new
+    @keyboard = CursesWrapper::Keyboard.new
     @board = Board.new
-    @position_x = cols / 2
-    @position_y = lines / 2
+    @position_x = x_midpoint
+    @position_y = y_midpoint
   end
 
   def screen
-    begin
-      window.noutrefresh
-      noecho
-      window.box("|", "-")
+    display do
+      silent_keys
+      add_border("|", "-")
       draw_box(60,"|","~")
-      window.noutrefresh
+      refresh
       render_board
       move_cursor
-    ensure
-      window.close
     end
   end
 
   private
 
-  attr_reader :board, :window
+  def_delegators :@curses,
+    :display, :position_and_type_from_center, :refresh, :get_command, :user_response,
+    :silent_keys, :add_border, :sub_window, :bold_type, :x_midpoint, :y_midpoint,
+    :delete_char_under_cursor, :insert_char_before_cursor, :screen_columns, :screen_rows
+
+  def_delegator :@keyboard, :key
+
+  attr_reader :board
 
   def move_cursor
     while true
-      command = getch
+      command = get_command
       case command
-      when Curses::Key::DOWN
+      when key(:down_arrow)
         @position_y += 4
         setpos(@position_y, @position_x)
-      when Curses::Key::UP
+      when key(:up_arrow)
         @position_y -= 4
         setpos(@position_y, @position_x)
-      when Curses::Key::RIGHT
+      when key(:right_arrow)
         @position_x += 6
         setpos(@position_y, @position_x)
-      when Curses::Key::LEFT
+      when key(:left_arrow)
         @position_x -= 6
         setpos(@position_y, @position_x)
-      when ?x
-        attron(color_pair(COLOR_BLUE)|A_BOLD){
-          addstr("X")
-        }
-      when ?q
+      when key(:x)
+        bold_type('X')
+      when key(:q)
         break
-      when ?o
-        attron(color_pair(COLOR_BLUE)|A_BOLD){
-          addstr("O")
-        }
-      when ?d
-        delch
-        insch(" ")
+      when key(:o)
+        bold_type('O')
+      when key(:d)
+        delete_char_under_cursor
+        insert_char_before_cursor(' ')
       end
     end
   end
@@ -68,7 +70,7 @@ class TwoPlayerGame
   end
 
   def draw_box(side, vertical_border, horizontal_border)
-    box = window.subwin(side/2, side, ((lines-(side/2))/2), ((cols-side)/2))
-    box.box(vertical_border, horizontal_border)
+    sub_window(side/2, side, ((screen_rows - (side / 2)) / 2), ((screen_columns - side) / 2))
+    add_border(vertical_border, horizontal_border)
   end
 end
