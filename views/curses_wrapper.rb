@@ -4,6 +4,7 @@ require 'pry'
 module CursesWrapper
   class Screen
     include Curses
+    ONE = 49
 
     def initilaize(height=0, width=0, top=0, left=0)
       @window = Curses::Window.new(0,0,0,0)
@@ -24,9 +25,9 @@ module CursesWrapper
       end
     end
 
-    def bold_type(text)
+    def bold_type(&block)
       Curses.attron(color_pair(COLOR_BLUE)|A_BOLD) do
-        text
+        yield
       end
     end
 
@@ -40,6 +41,10 @@ module CursesWrapper
 
     def refresh
       Curses.refresh
+    end
+
+    def char_under_cursor
+      Curses.inch()
     end
 
     def get_char

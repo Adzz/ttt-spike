@@ -14,7 +14,7 @@ class Menu
     curses.display do
       curses.silent_keys
       curses.refresh
-      curses.bold_type(position_and_type_from_center(MENU_HEADING, 7))
+      curses.bold_type(curses.position_and_type_from_center(MENU_HEADING, 7))
       curses.position_and_type_from_center(ONE_PLAYER, 2)
       curses.position_and_type_from_center(TWO_PLAYER)
       one_player_game?
@@ -26,19 +26,20 @@ class Menu
   attr_reader :curses
 
   def one_player_game?
-    game_type == 49
+    game_type == curses.class::ONE  #49 # this should not be a magic number
   end
 
   def game_type
     response = curses.get_char
-    if response == Curses::Key::UP
+    case response
+    when Curses::Key::UP
       curses.position_and_type_from_center(ARROW, 2, x_offset(ONE_PLAYER, ARROW))
       game_type
-    elsif response == Curses::Key::DOWN
+    when Curses::Key::DOWN
       curses.position_and_type_from_center(ARROW, 0, x_offset(TWO_PLAYER, ARROW))
       game_type
-    elsif curses.return_key.include?(response)
-      return Curses.inch()
+    when ->(response) { curses.return_key.include?(response) }
+      return curses.char_under_cursor
     else
       game_type
     end

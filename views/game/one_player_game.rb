@@ -8,7 +8,6 @@ class OnePlayerGame
 # gets the input of the user and at the right time uses the invoker to
 # invoke the command at the right time.
   def initialize(player)
-    super
     @window = Screen.new
     @board = Board.new
     @player = player

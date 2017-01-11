@@ -1,26 +1,23 @@
-require_relative 'screen.rb'
+require_relative 'curses_wrapper'
 
 class PlayerSelection
   SELECTION = "Choose Your Character"
 
-  def initialize(screen)
-    @window = Screen.new
+  def initialize
+    @curses = CursesWrapper::Screen.new
   end
 
   def screen
-    begin
-      window.refresh
-      noecho
+    curses.display do
+      curses.silent_keys
       display_options
       player
-    ensure
-      window.close
     end
   end
 
   private
 
-  attr_reader :window
+  attr_reader :curses
 
   def player
     choose_selection == 79 ? "O" : "X"
@@ -42,11 +39,11 @@ class PlayerSelection
   end
 
   def display_options
-    attron(color_pair(COLOR_BLUE)|A_BOLD) do
-      position_and_type_from_center(SELECTION, 2)
-      position_and_type_from_center("X", 0, -2)
-      position_and_type_from_center("O", 0, 2)
-      position_and_type_from_center("", 0, -3)
+    curses.bold_type do
+      curses.position_and_type_from_center(SELECTION, 2)
+      curses.position_and_type_from_center("X", 0, -2)
+      curses.position_and_type_from_center("O", 0, 2)
+      curses.position_and_type_from_center("", 0, -3)
     end
   end
 end
