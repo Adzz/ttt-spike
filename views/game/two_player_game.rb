@@ -27,10 +27,11 @@ class TwoPlayerGame
 
   def_delegators :@curses,
     :display, :position_and_type_from_center, :refresh, :get_command, :user_response,
-    :silent_keys, :add_border, :sub_window, :bold_type, :x_midpoint, :y_midpoint,
-    :delete_char_under_cursor, :insert_char_before_cursor, :screen_columns, :screen_rows
+    :silent_keys, :add_border, :sub_window, :x_midpoint, :y_midpoint,
+    :delete_char_under_cursor, :insert_char_before_cursor, :screen_columns, :screen_rows,
+    :move_cursor_to, :type
 
-  def_delegator :@keyboard, :key
+  def_delegator :@keyboard, :keys
 
   attr_reader :board
 
@@ -38,25 +39,25 @@ class TwoPlayerGame
     while true
       command = get_command
       case command
-      when key(:down_arrow)
+      when keys[:down_arrow]
         @position_y += 4
-        setpos(@position_y, @position_x)
-      when key(:up_arrow)
+        move_cursor_to(@position_y, @position_x)
+      when keys[:up_arrow]
         @position_y -= 4
-        setpos(@position_y, @position_x)
-      when key(:right_arrow)
+        move_cursor_to(@position_y, @position_x)
+      when keys[:right_arrow]
         @position_x += 6
-        setpos(@position_y, @position_x)
-      when key(:left_arrow)
+        move_cursor_to(@position_y, @position_x)
+      when keys[:left_arrow]
         @position_x -= 6
-        setpos(@position_y, @position_x)
-      when key(:x)
-        bold_type('X')
-      when key(:q)
+        move_cursor_to(@position_y, @position_x)
+      when keys[:x]
+        type('X')
+      when keys[:q]
         break
-      when key(:o)
-        bold_type('O')
-      when key(:d)
+      when keys[:o]
+        type('O')
+      when keys[:d]
         delete_char_under_cursor
         insert_char_before_cursor(' ')
       end
@@ -72,5 +73,6 @@ class TwoPlayerGame
   def draw_box(side, vertical_border, horizontal_border)
     sub_window(side/2, side, ((screen_rows - (side / 2)) / 2), ((screen_columns - side) / 2))
     add_border(vertical_border, horizontal_border)
+
   end
 end

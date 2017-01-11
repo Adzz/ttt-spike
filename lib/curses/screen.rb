@@ -9,22 +9,16 @@ module CursesWrapper
       @window = Curses::Window.new(0,0,0,0)
     end
 
-    def display(&block)
+    def display
       begin
         Curses.nonl
         Curses.stdscr.keypad(true)
         Curses.raw
         Curses.init_screen
-        yield self
+        yield
       ensure
         Curses.clear
         Curses.close_screen
-      end
-    end
-
-    def bold_type(text=nil,&block)
-      window.attron(color_pair(COLOR_BLUE)|A_BOLD) do
-        text || yield
       end
     end
 
@@ -36,8 +30,13 @@ module CursesWrapper
       Curses.noecho
     end
 
+    def move_cursor_to(y_coordinate, x_coordinate)
+      Curses.setpos(y_coordinate, x_coordinate)
+    end
+
     def add_border(vertical_border, horizontal_border)
       window.box(vertical_border, horizontal_border)
+      refresh
     end
 
     def clear
@@ -78,10 +77,6 @@ module CursesWrapper
 
     def x_midpoint
       screen_columns / 2
-    end
-
-    def return_key
-      [KEY_ENTER, 10, 13]
     end
 
     def type(string, speed=0.01)

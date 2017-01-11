@@ -24,3 +24,10 @@ end
 # Game.new(Menu.new.screen).screen ?
 
 # Welcome.new.screen
+player_selection = Selection.new(
+  {
+    title: 'Choose Your Character',
+    first_choice: 'X (Goes first)',
+    second_choice: 'O (Waits patiently)',
+  }
+)

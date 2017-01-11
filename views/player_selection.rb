@@ -1,49 +1,58 @@
 require_relative '../lib/curses/screen.rb'
+require_relative '../lib/curses/keyboard.rb'
 
 class PlayerSelection
-  SELECTION = "Choose Your Character"
+  extend Forwardable
+
+  SELECTION  = 'Choose Your Character'.freeze
+  ONE_PLAYER = 'X (Goes first)'.freeze
+  TWO_PLAYER = 'O (Waits patiently)'.freeze
+  ARROW      = "==> ".freeze
 
   def initialize
     @curses = CursesWrapper::Screen.new
+    @keyboard = CursesWrapper::Keyboard.new
   end
 
   def screen
-    curses.display do
-      curses.silent_keys
-      display_options
+    display do
+      silent_keys
+      position_and_type_from_center(SELECTION, 7)
+      position_and_type_from_center(ONE_PLAYER, 2)
+      position_and_type_from_center(TWO_PLAYER)
       player
     end
   end
 
   private
 
-  attr_reader :curses
+  def_delegators :@curses,
+    :display, :position_and_type_from_center, :get_command,
+    :silent_keys, :char_under_cursor
+
+  def_delegator :@keyboard, :keys
 
   def player
-    choose_selection == 79 ? "O" : "X"
+    choose_player == keys[:O] ? 'O' : 'X' # 79 ? "O" : "X"
   end
 
-  def choose_selection
-    response = getch
-    if response == Curses::Key::LEFT
-      position_and_type_from_center("", 0, -3)
-      choose_selection
-    elsif response == Curses::Key::RIGHT
-      position_and_type_from_center("", 0, 1)
-      choose_selection
-    elsif return_key.include?(response)
-      return inch()
+  def choose_player
+    response = get_command
+    case response
+    when keys[:up_arrow]
+      position_and_type_from_center(ARROW, 2, x_offset(ONE_PLAYER, ARROW))
+      choose_player
+    when keys[:down_arrow]
+      position_and_type_from_center(ARROW, 0, x_offset(TWO_PLAYER, ARROW))
+      choose_player
+    when ->(response) { keys[:return_key].include?(response) }
+      return char_under_cursor
     else
-      choose_selection
+      choose_player
     end
   end
 
-  def display_options
-    curses.bold_type do
-      curses.position_and_type_from_center(SELECTION, 2)
-      curses.position_and_type_from_center("X", 0, -2)
-      curses.position_and_type_from_center("O", 0, 2)
-      curses.position_and_type_from_center("", 0, -3)
-    end
+  def x_offset(text, arrow)
+    -(text.length/2 + (arrow.length/2))
   end
 end

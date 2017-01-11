@@ -1,6 +1,4 @@
 class GameTree
-  # This class should ONLY generate the game tree.
-  # The AI class should choose the best move.
   PATH = Struct.new(:game_states, :weight) do
     def initialize(*)
         super
@@ -26,17 +24,17 @@ class GameTree
       #   next_game_state = first_game_state.successors[game_state_location]
       #   game_states.push(next_game_state)
 
-      #   if first_game_state.lost? # check if we win after our first move
+      #   if first_game_state.lost?
       #     path.weight= (100 - game_states.length)
       #     break
-      #   elsif first_game_state.won? # check if we lost after our first move
+      #   elsif first_game_state.won?
       #     path.weight= (- (100 - game_states.length))
       #     break
       #   elsif next_game_state.lost?
       #     if first_game_state.player == game_state.player
-      #       path.weight= (100 - game_states.length) # check if they lost after their first move
+      #       path.weight= (100 - game_states.length)
       #     else
-      #       path.weight= (- (100 - game_states.length)) # check if they won after their first move
+      #       path.weight= (- (100 - game_states.length))
       #     end
       #     break
       #   else

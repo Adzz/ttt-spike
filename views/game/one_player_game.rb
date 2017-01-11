@@ -3,13 +3,14 @@ require_relative '../../lib/board.rb'
 require_relative '../../lib/ai.rb'
 
 class OnePlayerGame
-# Screen, this class is the reciever.
-# the client is the thing that contains the context;
-# gets the input of the user and at the right time uses the invoker to
-# invoke the command at the right time.
+  extend Forwardable
+
+  INSTRUCTIONS = "Press r to reset the board Enter to place your mark, and q to quit the game".freeze
+
+
   def initialize(player)
-    @window = Screen.new
-    @board = Board.new
+    @curses = CursesWrapper::Screen.new
+    @keyboard = CursesWrapper::Keyboard.new
     @player = player
     @computer = AI.new(other_player)
     @position_x = x_midpoint
@@ -17,68 +18,63 @@ class OnePlayerGame
   end
 
   def screen
-     begin
-      window.noutrefresh
-      noecho
-      window.box("|", "-")
-      draw_box(60,"|","~")
-      window.noutrefresh
+    display do
+      silent_keys
+      # window.box("|", "-")
+      # draw_box(60,"|","~")
       start_new_game
-    ensure
-      window.close
     end
   end
 
   private
 
+  def_delegators :@curses,
+    :display, :position_and_type_from_center, :get_command,
+    :silent_keys, :y_midpoint, :x_midpoint, :move_cursor_to, :refresh
+
+  def_delegator :@keyboard, :keys
+
   def start_new_game
     @board = Board.new
     render_board
-    window.noutrefresh
     player_move if player == "X"
     computer_move if player == "O"
   end
 
-  attr_reader :board, :player, :computer, :window
+  attr_reader :board, :player, :computer
 
   def player_move
     #gameover screen if game_over?
-    command = getch
-    if command == Curses::Key::DOWN
+    command = get_command
+    case command
+    when keys[:down_arrow]
       @position_y += 4
-      setpos(@position_y, @position_x)
+      move_cursor_to(@position_y, @position_x)
       player_move
-    elsif command == Curses::Key::UP
+    when keys[:up_arrow]
       @position_y -= 4
-      setpos(@position_y, @position_x)
+      move_cursor_to(@position_y, @position_x)
       player_move
-    elsif command == Curses::Key::RIGHT
+    when keys[:right_arrow]
       @position_x += 6
-      setpos(@position_y, @position_x)
+      move_cursor_to(@position_y, @position_x)
       player_move
-    elsif command == Curses::Key::LEFT
+    when keys[:left_arrow]
       @position_x -= 6
-      setpos(@position_y, @position_x)
+      move_cursor_to(@position_y, @position_x)
       player_move
-    elsif return_key.include?(command)
+    when ->(command) { keys[:return].include?(command) }
       player_move unless cursor_within_board?
       board.update_state(cursor_position_on_board, player)
       render_board
       computer_move
-    elsif command == ?q
+    when keys[:q]
       exit
-    elsif command == ?r
+    when keys[:r]
       start_new_game
     else
       player_move
     end
-  end
-
-  def place_mark
-    player_move unless cursor_within_board?
-    board.update_state(cursor_position_on_board, player)
-    render_board
-    computer_move
   end
 
   def computer_move
@@ -120,10 +116,11 @@ class OnePlayerGame
     board.renderable_board.each_with_index do |board_line, index|
       position_and_type_from_center(board_line, (board.height/2)-index,0,0)
     end
+    position_and_type_from_center(INSTRUCTIONS, -board.height, 0,0)
   end
 
-  def draw_box(side, vertical_border, horizontal_border)
-    box = window.subwin(side/2, side, ((screen_rows-(side/2))/2), ((screen_columns-side)/2))
-    box.box(vertical_border, horizontal_border)
-  end
+  # def draw_box(side, vertical_border, horizontal_border)
+  #   box = window.subwin(side/2, side, ((screen_rows-(side/2))/2), ((screen_columns-side)/2))
+  #   box.box(vertical_border, horizontal_border)
+  # end
 end

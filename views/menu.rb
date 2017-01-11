@@ -17,7 +17,7 @@ class Menu
   def screen
     display do
       silent_keys
-      bold_type { position_and_type_from_center(MENU_HEADING, 7) }
+      position_and_type_from_center(MENU_HEADING, 7)
       position_and_type_from_center(ONE_PLAYER, 2)
       position_and_type_from_center(TWO_PLAYER)
       one_player_game?
@@ -28,24 +28,24 @@ class Menu
 
   def_delegators :@curses,
     :display, :position_and_type_from_center, :get_command,
-    :silent_keys, :return_key, :char_under_cursor, :bold_type
+    :silent_keys, :char_under_cursor
 
-  def_delegator :@keyboard, :key
+  def_delegator :@keyboard, :keys
 
   def one_player_game?
-    game_type == key(:one)  #49 # this should not be a magic number Curses::Keyboard
+    game_type == keys[:one]
   end
 
   def game_type
     response = get_command
     case response
-    when key(:up_arrow)
+    when keys[:up_arrow]
       position_and_type_from_center(ARROW, 2, x_offset(ONE_PLAYER, ARROW))
       game_type
-    when key(:down_arrow)
+    when keys[:down_arrow]
       position_and_type_from_center(ARROW, 0, x_offset(TWO_PLAYER, ARROW))
       game_type
-    when ->(response) { return_key.include?(response) }
+    when ->(response) { keys[:return_key].include?(response) }
       return char_under_cursor
     else
       game_type
