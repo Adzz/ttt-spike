@@ -20,8 +20,6 @@ class OnePlayerGame
   def screen
     display do
       silent_keys
-      # window.box("|", "-")
-      # draw_box(60,"|","~")
       start_new_game
     end
   end
@@ -29,8 +27,8 @@ class OnePlayerGame
   private
 
   def_delegators :@curses,
-    :display, :position_and_type_from_center, :get_command,
-    :silent_keys, :y_midpoint, :x_midpoint, :move_cursor_to, :refresh
+    :display, :position_and_type_from_center, :get_command, :silent_keys, :y_midpoint, :x_midpoint,
+    :move_cursor_to, :refresh
 
   def_delegator :@keyboard, :keys
 
@@ -118,9 +116,4 @@ class OnePlayerGame
     end
     position_and_type_from_center(INSTRUCTIONS, -board.height, 0,0)
   end
-
-  # def draw_box(side, vertical_border, horizontal_border)
-  #   box = window.subwin(side/2, side, ((screen_rows-(side/2))/2), ((screen_columns-side)/2))
-  #   box.box(vertical_border, horizontal_border)
-  # end
 end

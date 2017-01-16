@@ -15,8 +15,6 @@ class TwoPlayerGame
   def screen
     display do
       silent_keys
-      add_border("|", "-")
-      draw_box(60,"|","~")
       refresh
       render_board
       move_cursor
@@ -27,9 +25,8 @@ class TwoPlayerGame
 
   def_delegators :@curses,
     :display, :position_and_type_from_center, :refresh, :get_command, :user_response,
-    :silent_keys, :add_border, :sub_window, :x_midpoint, :y_midpoint,
-    :delete_char_under_cursor, :insert_char_before_cursor, :screen_columns, :screen_rows,
-    :move_cursor_to, :type
+    :silent_keys, :add_border, :sub_window, :x_midpoint, :y_midpoint, :delete_char_under_cursor,
+    :insert_char_before_cursor, :screen_columns, :screen_rows, :move_cursor_to, :type
 
   def_delegator :@keyboard, :keys
 
@@ -68,11 +65,5 @@ class TwoPlayerGame
     board.renderable_board.each_with_index do |board_line, index|
       position_and_type_from_center(board_line, (board.height/2)-index,0,0)
     end
-  end
-
-  def draw_box(side, vertical_border, horizontal_border)
-    sub_window(side/2, side, ((screen_rows - (side / 2)) / 2), ((screen_columns - side) / 2))
-    add_border(vertical_border, horizontal_border)
-
   end
 end

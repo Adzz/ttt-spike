@@ -195,14 +195,5 @@ RSpec.describe CursesWrapper::Screen do
       expect(subject).to receive(:type).with(string, anything).once
       subject.position_and_type_from_center(string)
     end
-
-    it "offsets the x axis by the string length by default" do
-      string = "aww yis"
-      expect(subject.position_and_type_from_center).to
-    end
   end
-
-  # describe "#user_response" do
-  #   it ""
-  # end
 end

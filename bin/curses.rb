@@ -6,7 +6,6 @@ require_relative '../views/menu.rb'
 require_relative '../views/player_selection.rb'
 require_relative '../views/game/one_player_game.rb'
 require_relative '../views/game/two_player_game.rb'
-# require_relative '../views/screen.rb'
 
 unless Welcome.new.screen
   Goodbye.new.screen
@@ -15,19 +14,7 @@ end
 
 case Menu.new.screen
 when true
-  # PlayerSelection.new.screen
   OnePlayerGame.new(PlayerSelection.new.screen).screen
 when false
   TwoPlayerGame.new.screen
 end
-
-# Game.new(Menu.new.screen).screen ?
-
-# Welcome.new.screen
-player_selection = Selection.new(
-  {
-    title: 'Choose Your Character',
-    first_choice: 'X (Goes first)',
-    second_choice: 'O (Waits patiently)',
-  }
-)
