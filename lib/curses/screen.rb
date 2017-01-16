@@ -8,17 +8,19 @@ module CursesWrapper
 
     def display
       begin
-        Curses.nonl
-        Curses.stdscr.keypad(true)
-        Curses.raw
-        Curses.init_screen
+        init_screen
+        enable_enter_key
+        enable_function_keys
+        enable_keyboard
         yield
       ensure
-        Curses.clear
-        Curses.close_screen
+        quit_cleanly
       end
     end
 
+    def_delegator :Curses, :nonl, :enable_enter_key
+    def_delegator :Curses, :raw, :enable_keyboard
+    def_delegator :Curses, :stdscr, :screen
     def_delegator :Curses, :noecho, :silent_keys
     def_delegator :Curses, :delch, :delete_char_under_cursor
     def_delegator :Curses, :inch, :char_under_cursor
@@ -27,10 +29,24 @@ module CursesWrapper
     def_delegator :Curses, :cols, :screen_columns
     def_delegator :Curses, :insch, :insert_char_before_cursor
     def_delegator :Curses, :setpos, :move_cursor_to
+    def_delegator :Curses, :doupdate, :refresh
     def_delegator :Curses, :addstr, :add_string
     def_delegator :Curses, :getstr, :get_string
 
-    def_delegators :Curses, :clear, :refresh
+    def_delegators :Curses, :close_screen, :init_screen
+
+    def clear
+      screen.clear
+    end
+
+    def quit_cleanly
+      clear
+      close_screen
+    end
+
+    def enable_function_keys
+      screen.keypad(true)
+    end
 
     def y_midpoint
       screen_rows / 2
@@ -60,7 +76,7 @@ module CursesWrapper
     # the greater the y_axis_offset, the further UP the cursor is from screen center
     # the greater the x_axis_offset, the further RIGHT the cursor is from screen center
     def position_and_type_from_center(content='', y_axis_offset=0, x_axis_offset=0, speed=0.01)
-      Curses.setpos(
+      move_cursor_to(
         y_midpoint - y_axis_offset, ((screen_columns - content.length) / 2) + x_axis_offset
       )
       type(content, speed)

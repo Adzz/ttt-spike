@@ -8,7 +8,7 @@ RSpec.describe CursesWrapper::Screen do
 
   describe "#clear" do
     it "calls clear" do
-      expect(Curses).to receive(:clear).once
+      expect(Curses.stdscr).to receive(:clear).once
       subject.clear
     end
   end
@@ -69,6 +69,53 @@ RSpec.describe CursesWrapper::Screen do
     end
   end
 
+  describe "#enable_keyboard" do
+    it "calls raw" do
+      expect(Curses).to receive(:raw).once
+      subject.enable_keyboard
+    end
+  end
+
+  describe "#enable_enter_key" do
+    it "calls nonl" do
+      expect(Curses).to receive(:nonl).once
+      subject.enable_enter_key
+    end
+  end
+
+  describe "#screen" do
+    it "calls stdscr" do
+      expect(Curses).to receive(:stdscr).once
+      subject.screen
+    end
+  end
+
+  describe "#init_screen" do
+    it "calls init_screen" do
+      expect(Curses).to receive(:init_screen).once
+      subject.init_screen
+    end
+  end
+
+  describe "#enable_function_keys" do
+    it "calls keypad" do
+      expect(Curses.stdscr).to receive(:keypad).with(true).once
+      subject.enable_function_keys
+    end
+  end
+
+  describe "#quit_cleanly" do
+    it "calls clear" do
+      expect(Curses.stdscr).to receive(:clear).once
+      subject.quit_cleanly
+    end
+
+    it "calls screen close" do
+      expect(Curses).to receive(:close_screen).once
+      subject.quit_cleanly
+    end
+  end
+
   describe "#get_string" do
     it "calls getstr" do
       expect(Curses).to receive(:getstr).once
@@ -80,42 +127,44 @@ RSpec.describe CursesWrapper::Screen do
     it "adds a string one char at a time" do
       string = "aww yis"
       expect(Curses).to receive(:addstr).exactly(string.length).times
-      expect(Curses).to receive(:refresh).exactly(string.length).times
+      expect(Curses).to receive(:doupdate).exactly(string.length).times
       subject.type(string)
     end
   end
 
   describe "#refresh" do
-    it "calls refresh" do
-      expect(Curses).to receive(:refresh).once
+    it "calls doupdate" do
+      expect(Curses).to receive(:doupdate).once
       subject.refresh
     end
   end
 
-  xdescribe "#display" do
+  describe "#display" do
     describe "config" do
-      it "calls nonl" do
+      specify { expect { |bloc| subject.display(&bloc) }.to yield_with_no_args }
+
+      it "enables  the enter_key" do
         expect(Curses).to receive(:nonl).once
         subject.display { subject.silent_keys }
       end
 
-      it "calls keypad with true on stdscr" do
+      it "enables function keys" do
         expect(Curses.stdscr).to receive(:keypad).with(true).once
         subject.display { subject.silent_keys }
       end
 
-      it "calls raw" do
+      it "enables the standard keyboard" do
         expect(Curses).to receive(:raw).once
         subject.display { subject.silent_keys }
       end
 
-      it "calls init_screen" do
+      it "initializes a standard screen" do
         expect(Curses).to receive(:init_screen).once
         subject.display { subject.silent_keys }
       end
 
-      it "ensures clear is called" do
-        expect(Curses).to receive(:clear).once
+      it "ensure clear is called" do
+        expect(Curses.stdscr).to receive(:clear).once
         subject.display { subject.silent_keys }
       end
 
@@ -126,21 +175,34 @@ RSpec.describe CursesWrapper::Screen do
     end
   end
 
-  xdescribe "#y_midpoint" do
+  describe "#y_midpoint" do
     it "returns the midpoint of the y axis for the screen" do
-      curses_window = described_class.new(40,40,40,40)
-      expect(curses_window.y_midpoint).to eq 20
+      rows = subject.screen_rows
+      expect(subject.y_midpoint).to eq rows / 2
     end
   end
 
-  xdescribe "#x_midpoint" do
+  describe "#x_midpoint" do
     it "returns the midpoint of the x axis for the screen" do
-      curses_window = described_class.new(10,10,10,10)
-      expect(curses_window.y_midpoint).to eq curses_window.screen_columns / 2
+      columns = subject.screen_columns
+      expect(subject.x_midpoint).to eq columns / 2
     end
   end
 
-  describe "#user_response" do
-    it ""
+  describe "#position_and_type_from_center" do
+    it "types to the screen" do
+      string = "aww yis"
+      expect(subject).to receive(:type).with(string, anything).once
+      subject.position_and_type_from_center(string)
+    end
+
+    it "offsets the x axis by the string length by default" do
+      string = "aww yis"
+      expect(subject.position_and_type_from_center).to
+    end
   end
+
+  # describe "#user_response" do
+  #   it ""
+  # end
 end
