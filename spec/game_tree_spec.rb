@@ -1,9 +1,3 @@
-require 'spec_helper'
-require 'game_tree'
-require 'game_state'
-require 'board'
-require 'pry'
-
 RSpec.describe GameTree do
   context 'when computer is X' do
     it 'suggests a winning move when there is a winning move to make.' do

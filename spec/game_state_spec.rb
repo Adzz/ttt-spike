@@ -1,8 +1,3 @@
-require 'spec_helper'
-require 'game_state'
-require 'board'
-require 'pry'
-
 RSpec.describe GameState do
   context 'checking for an illegal board' do
     it 'player cant be O if there is no X on the board (X goes first)' do

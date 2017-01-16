@@ -4,6 +4,7 @@ require 'pry'
 module CursesWrapper
   class Screen
     include Curses
+    extend Forwardable
 
     def initialize(height=0, width=0, top=0, left=0)
       @window = Curses::Window.new(0,0,0,0)

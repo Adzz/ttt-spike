@@ -1,6 +1,3 @@
-require 'spec_helper'
-require 'AI'
-
 RSpec.describe AI do
   context 'When X' do
     subject { described_class.new("X") }

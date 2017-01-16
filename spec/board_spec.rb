@@ -1,6 +1,3 @@
-require 'spec_helper'
-require 'board.rb'
-
 RSpec.describe Board do
   describe '#update_state' do
     it 'updates the state of a board for the given position and player' do

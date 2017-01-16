@@ -18,34 +18,34 @@ class GameTree
         game_state.successors[route.first]
       ]
 
-      # route.drop(1).each do |game_state_location|
-      #   first_game_state = game_states.pop
-      #   game_states.push(first_game_state)
-      #   next_game_state = first_game_state.successors[game_state_location]
-      #   game_states.push(next_game_state)
+      route.drop(1).each do |game_state_location|
+        first_game_state = game_states.pop
+        game_states.push(first_game_state)
+        next_game_state = first_game_state.successors[game_state_location]
+        game_states.push(next_game_state)
 
-      #   if first_game_state.lost?
-      #     path.weight= (100 - game_states.length)
-      #     break
-      #   elsif first_game_state.won?
-      #     path.weight= (- (100 - game_states.length))
-      #     break
-      #   elsif next_game_state.lost?
-      #     if first_game_state.player == game_state.player
-      #       path.weight= (100 - game_states.length)
-      #     else
-      #       path.weight= (- (100 - game_states.length))
-      #     end
-      #     break
-      #   else
-      #     game_states.push(next_game_state)
-      #   end
-      # end
+        if first_game_state.lost?
+          path.weight= (100 - game_states.length)
+          break
+        elsif first_game_state.won?
+          path.weight= (- (100 - game_states.length))
+          break
+        elsif next_game_state.lost?
+          if first_game_state.player == game_state.player
+            path.weight= (100 - game_states.length)
+          else
+            path.weight= (- (100 - game_states.length))
+          end
+          break
+        else
+          game_states.push(next_game_state)
+        end
+      end
 
-      # path.game_states= game_states
-      # paths << path
+      path.game_states= game_states
+      paths << path
       # Cant see why the above works, but this does not:
-      paths << evaluate(generated_path(game_states, PATH.new, route))
+      # paths << evaluate(generated_path(game_states, PATH.new, route))
     end
   end
 

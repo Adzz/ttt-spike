@@ -63,7 +63,7 @@ class OnePlayerGame
       @position_x -= 6
       move_cursor_to(@position_y, @position_x)
       player_move
-    when ->(command) { keys[:return].include?(command) }
+    when ->(command) { keys[:return_key].include?(command) }
       player_move unless cursor_within_board?
       board.update_state(cursor_position_on_board, player)
       render_board
