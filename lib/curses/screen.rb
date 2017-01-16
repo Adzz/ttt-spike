@@ -23,12 +23,17 @@ module CursesWrapper
       end
     end
 
+    def_delegator :Curses, :noecho, :silent_keys
+    def_delegator :Curses, :delch, :delete_char_under_cursor
+    def_delegator :Curses, :inch, :char_under_cursor
+    def_delegator :Curses, :getch, :get_command
+    def_delegator :Curses, :lines, :screen_rows
+    def_delegator :Curses, :cols, :screen_columns
+    def_delegator :Curses, :insch, :insert_char_before_cursor
+    def_delegator :Curses, :clear
+
     def sub_window(height, width, top, left)
       window.subwin(height, width, top, left)
-    end
-
-    def silent_keys
-      Curses.noecho
     end
 
     def move_cursor_to(y_coordinate, x_coordinate)
@@ -40,36 +45,8 @@ module CursesWrapper
       refresh
     end
 
-    def clear
-      Curses.clear
-    end
-
-    def delete_char_under_cursor
-      Curses.delch
-    end
-
-    def insert_char_before_cursor(char)
-      Curses.insch(char)
-    end
-
     def refresh
       window.noutrefresh
-    end
-
-    def char_under_cursor
-      Curses.inch()
-    end
-
-    def get_command
-      Curses.getch
-    end
-
-    def screen_rows
-      Curses.lines
-    end
-
-    def screen_columns
-      Curses.cols
     end
 
     def y_midpoint
