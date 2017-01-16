@@ -6,10 +6,6 @@ module CursesWrapper
     include Curses
     extend Forwardable
 
-    def initialize(height=0, width=0, top=0, left=0)
-      @window = Curses::Window.new(0,0,0,0)
-    end
-
     def display
       begin
         Curses.nonl
@@ -30,24 +26,11 @@ module CursesWrapper
     def_delegator :Curses, :lines, :screen_rows
     def_delegator :Curses, :cols, :screen_columns
     def_delegator :Curses, :insch, :insert_char_before_cursor
-    def_delegator :Curses, :clear
+    def_delegator :Curses, :setpos, :move_cursor_to
+    def_delegator :Curses, :addstr, :add_string
+    def_delegator :Curses, :getstr, :get_string
 
-    def sub_window(height, width, top, left)
-      window.subwin(height, width, top, left)
-    end
-
-    def move_cursor_to(y_coordinate, x_coordinate)
-      Curses.setpos(y_coordinate, x_coordinate)
-    end
-
-    def add_border(vertical_border, horizontal_border)
-      window.box(vertical_border, horizontal_border)
-      refresh
-    end
-
-    def refresh
-      window.noutrefresh
-    end
+    def_delegators :Curses, :clear, :refresh
 
     def y_midpoint
       screen_rows / 2
@@ -59,8 +42,8 @@ module CursesWrapper
 
     def type(string, speed=0.01)
       string.split("").each do |char|
-        Curses.addstr(char)
-        Curses.refresh
+        add_string(char)
+        refresh
         sleep(speed)
       end
     end
@@ -69,7 +52,7 @@ module CursesWrapper
       response = ""
       while response == ""
         position_and_type_from_center("")
-        response = Curses.getstr
+        response = get_string
       end
       response
     end
@@ -82,9 +65,5 @@ module CursesWrapper
       )
       type(content, speed)
     end
-
-    private
-
-    attr_reader :window
   end
 end

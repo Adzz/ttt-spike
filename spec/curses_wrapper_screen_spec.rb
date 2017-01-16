@@ -55,7 +55,44 @@ RSpec.describe CursesWrapper::Screen do
     end
   end
 
-  describe "#display" do
+  describe "#move_cursor_to" do
+    it "calls setpos" do
+      expect(Curses).to receive(:setpos).with(1, 3).once
+      subject.move_cursor_to(1, 3)
+    end
+  end
+
+  describe "#add_string" do
+    it "calls addstr" do
+      expect(Curses).to receive(:addstr).with("aww yis").once
+      subject.add_string("aww yis")
+    end
+  end
+
+  describe "#get_string" do
+    it "calls getstr" do
+      expect(Curses).to receive(:getstr).once
+      subject.get_string
+    end
+  end
+
+  describe "#type" do
+    it "adds a string one char at a time" do
+      string = "aww yis"
+      expect(Curses).to receive(:addstr).exactly(string.length).times
+      expect(Curses).to receive(:refresh).exactly(string.length).times
+      subject.type(string)
+    end
+  end
+
+  describe "#refresh" do
+    it "calls refresh" do
+      expect(Curses).to receive(:refresh).once
+      subject.refresh
+    end
+  end
+
+  xdescribe "#display" do
     describe "config" do
       it "calls nonl" do
         expect(Curses).to receive(:nonl).once
@@ -87,8 +124,23 @@ RSpec.describe CursesWrapper::Screen do
         subject.display { subject.silent_keys }
       end
     end
+  end
 
-    describe "yield" do
+  xdescribe "#y_midpoint" do
+    it "returns the midpoint of the y axis for the screen" do
+      curses_window = described_class.new(40,40,40,40)
+      expect(curses_window.y_midpoint).to eq 20
     end
+  end
+
+  xdescribe "#x_midpoint" do
+    it "returns the midpoint of the x axis for the screen" do
+      curses_window = described_class.new(10,10,10,10)
+      expect(curses_window.y_midpoint).to eq curses_window.screen_columns / 2
+    end
+  end
+
+  describe "#user_response" do
+    it ""
   end
 end

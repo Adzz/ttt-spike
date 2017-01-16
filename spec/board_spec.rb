@@ -86,6 +86,8 @@ RSpec.describe Board do
         expect(board.winning_board_for?(player)).to be true
       end
 
+# NEED TO ADD DIAGONALS
+
       it 'returns false if X or O do not take a winning row' do
         expect(subject.winning_board_for?(player)).to be false
 
@@ -126,6 +128,8 @@ RSpec.describe Board do
         board = Board.new([0,1,"O",3,4,"O",6,7,"O"])
         expect(board.winning_board_for?(player)).to be true
       end
+
+# NEED TO ADD DIAGONALS
 
       it 'returns false if X or O do not take a winning row' do
         expect(subject.winning_board_for?(player)).to be false
