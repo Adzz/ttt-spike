@@ -12,19 +12,9 @@ class Board
 
   attr_reader :state
 
-  def initialize(state=[*0..8])
+  def initialize(state: [*0..8], visual_board: VisualBoard.new)
     @state = state
-    @visual_board_lines = [
-      "           |     |          ",
-      "           |     |          ",
-      "      _____|_____|_____     ",
-      "           |     |          ",
-      "           |     |          ",
-      "      _____|_____|_____     ",
-      "           |     |          ",
-      "           |     |          ",
-      "           |     |          "
-    ]
+    @visual_board = visual_board
   end
 
   def game_over?
@@ -42,35 +32,11 @@ class Board
 
   def update_state(position, player)
     state[position] = player
+    visual_board.renderable_board(state)
     state
-  end
-
-  def renderable_board
-    cells.each_with_index do |cell, index|
-      visual_board_lines[cell[0]][cell[1]] = "X" if state[index] == "X"
-      visual_board_lines[cell[0]][cell[1]] = "O" if state[index] == "O"
-      visual_board_lines[cell[0]][cell[1]] = " " if state[index].is_a? Numeric
-    end
-    visual_board_lines
-  end
-
-  def height
-    visual_board_lines.count
-  end
-
-  def width
-    visual_board_lines.first.length
   end
 
   private
 
-  attr_reader :visual_board_lines
-
-  def cells
-    @cells ||= [
-      [1,8],[1,14],[1,20],
-      [4,8],[4,14],[4,20],
-      [7,8],[7,14],[7,20]
-    ]
-  end
+  attr_reader :visual_board
 end
