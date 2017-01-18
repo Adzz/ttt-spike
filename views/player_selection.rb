@@ -33,7 +33,7 @@ class PlayerSelection
   def_delegator :@keyboard, :keys
 
   def player
-    choose_player == keys[:O] ? 'O' : 'X' # 79 ? "O" : "X"
+    choose_player == keys[:O] ? 'O' : 'X'
   end
 
   def choose_player

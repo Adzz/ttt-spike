@@ -3,8 +3,11 @@ require 'pry'
 
 module CursesWrapper
   class Screen
-    include Curses
     extend Forwardable
+
+    def initialize
+      @curses = Curses
+    end
 
     def display
       begin
@@ -18,22 +21,22 @@ module CursesWrapper
       end
     end
 
-    def_delegator :Curses, :nonl, :enable_enter_key
-    def_delegator :Curses, :raw, :enable_keyboard
-    def_delegator :Curses, :stdscr, :screen
-    def_delegator :Curses, :noecho, :silent_keys
-    def_delegator :Curses, :delch, :delete_char_under_cursor
-    def_delegator :Curses, :inch, :char_under_cursor
-    def_delegator :Curses, :getch, :get_command
-    def_delegator :Curses, :lines, :screen_rows
-    def_delegator :Curses, :cols, :screen_columns
-    def_delegator :Curses, :insch, :insert_char_before_cursor
-    def_delegator :Curses, :setpos, :move_cursor_to
-    def_delegator :Curses, :doupdate, :refresh
-    def_delegator :Curses, :addstr, :add_string
-    def_delegator :Curses, :getstr, :get_string
+    def_delegator :@curses, :nonl, :enable_enter_key
+    def_delegator :@curses, :raw, :enable_keyboard
+    def_delegator :@curses, :stdscr, :screen
+    def_delegator :@curses, :noecho, :silent_keys
+    def_delegator :@curses, :delch, :delete_char_under_cursor
+    def_delegator :@curses, :inch, :char_under_cursor
+    def_delegator :@curses, :getch, :get_command
+    def_delegator :@curses, :lines, :screen_rows
+    def_delegator :@curses, :cols, :screen_columns
+    def_delegator :@curses, :insch, :insert_char_before_cursor
+    def_delegator :@curses, :setpos, :move_cursor_to
+    def_delegator :@curses, :doupdate, :refresh
+    def_delegator :@curses, :addstr, :add_string
+    def_delegator :@curses, :getstr, :get_string
 
-    def_delegators :Curses, :close_screen, :init_screen
+    def_delegators :@curses, :close_screen, :init_screen
 
     def clear
       screen.clear
@@ -59,7 +62,7 @@ module CursesWrapper
     def type(string, speed=0.01)
       string.split("").each do |char|
         add_string(char)
-        refresh
+        screen.refresh
         sleep(speed)
       end
     end

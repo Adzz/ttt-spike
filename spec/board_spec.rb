@@ -86,11 +86,18 @@ RSpec.describe Board do
         expect(board.winning_board_for?(player)).to be true
       end
 
-# NEED TO ADD DIAGONALS
+      it 'returns true if X takes diagonal top right to bottom left' do
+        board = Board.new([0,1,"X",3,"X",5,"X",7,8])
+        expect(board.winning_board_for?(player)).to be true
+      end
+
+      it 'returns true if X takes diagonal top left to bottom right' do
+        board = Board.new(["X",1,2,3,"X",5,6,7,"X"])
+        expect(board.winning_board_for?(player)).to be true
+      end
 
       it 'returns false if X or O do not take a winning row' do
         expect(subject.winning_board_for?(player)).to be false
-
         board = Board.new(["X", "O",2,3,4,5,"X","O",8])
         expect(board.winning_board_for?(player)).to be false
       end
@@ -129,7 +136,15 @@ RSpec.describe Board do
         expect(board.winning_board_for?(player)).to be true
       end
 
-# NEED TO ADD DIAGONALS
+      it 'returns true if O takes diagonal top right to bottom left' do
+        board = Board.new([0,1,"O",3,"O",5,"O",7,8])
+        expect(board.winning_board_for?(player)).to be true
+      end
+
+      it 'returns true if O takes diagonal top left to bottom right' do
+        board = Board.new(["O",1,2,3,"O",5,6,7,"O"])
+        expect(board.winning_board_for?(player)).to be true
+      end
 
       it 'returns false if X or O do not take a winning row' do
         expect(subject.winning_board_for?(player)).to be false

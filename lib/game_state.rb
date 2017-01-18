@@ -33,7 +33,7 @@ class GameState
   end
 
   private
-#  this should be run everytime we change a board's state, probably in the board class?
+
   def validate_board(player, current_state)
     x_count = current_state.select { |x| x == "X" }.count
     o_count = current_state.select { |o| o == "O" }.count
