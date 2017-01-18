@@ -42,7 +42,7 @@ class OnePlayerGame
   attr_reader :board, :player, :computer
 
   def player_move
-    #gameover screen if game_over?
+    start_new_game if board.game_over?
     command = get_command
     case command
     when keys[:down_arrow]
@@ -76,7 +76,7 @@ class OnePlayerGame
   end
 
   def computer_move
-    # if game_over?
+    start_new_game if board.game_over?
     next_state = computer.move(board.state)
     position = (board.state - next_state).first
     board.update_state(position, other_player)

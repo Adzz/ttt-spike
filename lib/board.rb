@@ -27,6 +27,10 @@ class Board
     ]
   end
 
+  def game_over?
+    winning_board_for?("X") || winning_board_for?("O") || (state - ["X"] - ["O"]).count == 0
+  end
+
   def winning_board_for?(player)
     WINNING_LINES.each do |line|
       if state.values_at(*line) == [player, player, player]

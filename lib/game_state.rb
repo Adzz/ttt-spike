@@ -28,10 +28,6 @@ class GameState
     board.winning_board_for?(other_player)
   end
 
-  def game_over?
-    won? || lost? || (current_state - [player] - [other_player]).count == 0
-  end
-
   private
 
   def validate_board(player, current_state)

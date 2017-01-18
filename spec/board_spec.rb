@@ -6,46 +6,6 @@ RSpec.describe Board do
     end
   end
 
-  describe '#renderable_board' do
-    let(:renderable_board) do
-      [
-        "           |     |          ",
-        "           |     |          ",
-        "      _____|_____|_____     ",
-        "           |     |          ",
-        "           |     |          ",
-        "      _____|_____|_____     ",
-        "           |     |          ",
-        "           |     |          ",
-        "           |     |          "
-      ]
-    end
-
-    it 'generates a representation of the board state that can be rendered' do
-      expect(subject.renderable_board).to eq renderable_board
-    end
-
-    context 'updated state' do
-      it 'when the state is updated renderable_board gives us a representation of the new state' do
-        renderable_board[1][8] = 'X'
-        subject.update_state(0, 'X')
-        expect(subject.renderable_board).to eq renderable_board
-      end
-    end
-  end
-
-  describe '#height' do
-    it 'returns the visual hieght of the board' do
-      expect(subject.height).to eq 9
-    end
-  end
-
-  describe '#width' do
-    it 'returns the visual width of the board' do
-      expect(subject.width).to eq 28
-    end
-  end
-
   describe '#state' do
     it 'returns the state of the board' do
       expect(subject.state).to eq [*0..8]
