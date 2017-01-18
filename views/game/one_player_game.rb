@@ -28,7 +28,7 @@ class OnePlayerGame
 
   def_delegators :@curses,
     :display, :position_and_type_from_center, :get_command, :silent_keys, :y_midpoint, :x_midpoint,
-    :move_cursor_to, :refresh
+    :move_cursor_to, :refresh, :border
 
   def_delegator :@keyboard, :keys
 
@@ -114,6 +114,7 @@ class OnePlayerGame
     board.renderable_board.each_with_index do |board_line, index|
       position_and_type_from_center(board_line, (board.height/2)-index,0,0)
     end
+    border("|", "~")
     position_and_type_from_center(INSTRUCTIONS, -board.height, 0,0)
   end
 end

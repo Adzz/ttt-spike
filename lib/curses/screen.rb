@@ -5,8 +5,8 @@ module CursesWrapper
   class Screen
     extend Forwardable
 
-    def initialize
-      @curses = Curses
+    def initialize(curses=Curses)
+      @curses = curses
     end
 
     def display
@@ -37,6 +37,10 @@ module CursesWrapper
     def_delegator :@curses, :getstr, :get_string
 
     def_delegators :@curses, :close_screen, :init_screen
+
+    def border(vertical_border, horizontal_border)
+      screen.box(vertical_border, horizontal_border)
+    end
 
     def clear
       screen.clear

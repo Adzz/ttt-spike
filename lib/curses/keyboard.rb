@@ -11,12 +11,12 @@ module CursesWrapper
         down_arrow: Curses::Key::DOWN,
         left_arrow: Curses::Key::LEFT,
         right_arrow: Curses::Key::RIGHT,
-        x: ?x.ord,
-        q: ?q.ord,
-        o: ?o.ord,
-        d: ?d.ord,
-        r: ?r.ord,
-        O: ?O.ord,
+        x: ?x,
+        q: ?q,
+        o: ?o,
+        d: ?d,
+        r: ?r,
+        O: ?O,
         return_key: [Curses::KEY_ENTER, 10, 13]
       }
     end

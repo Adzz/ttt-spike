@@ -26,7 +26,7 @@ class TwoPlayerGame
   def_delegators :@curses,
     :display, :position_and_type_from_center, :refresh, :get_command, :user_response,
     :silent_keys, :add_border, :sub_window, :x_midpoint, :y_midpoint, :delete_char_under_cursor,
-    :insert_char_before_cursor, :screen_columns, :screen_rows, :move_cursor_to, :type
+    :insert_char_before_cursor, :screen_columns, :screen_rows, :move_cursor_to, :type, :border
 
   def_delegator :@keyboard, :keys
 
@@ -65,5 +65,6 @@ class TwoPlayerGame
     board.renderable_board.each_with_index do |board_line, index|
       position_and_type_from_center(board_line, (board.height/2)-index,0,0)
     end
+    border("|", "~")
   end
 end
