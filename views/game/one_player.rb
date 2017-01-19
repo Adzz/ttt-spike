@@ -1,19 +1,11 @@
-require_relative '../../lib/curses/screen.rb'
-require_relative '../../lib/board.rb'
+require_relative '../game.rb'
 require_relative '../../lib/ai.rb'
 
-class OnePlayerGame
-  extend Forwardable
-
-  INSTRUCTIONS = "Press r to reset the board, Enter to place your mark, and q to quit the game".freeze
-
+class OnePlayer < Game
   def initialize(player)
-    @curses = CursesWrapper::Screen.new
-    @keyboard = CursesWrapper::Keyboard.new
     @player = player
     @computer = AI.new(other_player)
-    @position_x = x_midpoint
-    @position_y = y_midpoint
+    super
   end
 
   def screen
@@ -25,19 +17,6 @@ class OnePlayerGame
   end
 
   private
-
-  def_delegators :@curses,
-    :border,
-    :display,
-    :refresh,
-    :y_midpoint,
-    :x_midpoint,
-    :silent_keys,
-    :get_command,
-    :move_cursor_to,
-    :position_and_type_from_center
-
-  def_delegator :@keyboard, :keys
 
   def start_new_game
     @board = Board.new
@@ -93,35 +72,5 @@ class OnePlayerGame
 
   def other_player
     player == "X" ? "O" : "X"
-  end
-
-  def cursor_within_board?
-    cells.include?([@position_y, @position_x])
-  end
-
-  def cursor_position_on_board
-    cells.rindex { |cell| cell == [@position_y, @position_x] }
-  end
-
-  def cells
-    [
-      [ y_midpoint - 4, x_midpoint - 6 ],
-      [ y_midpoint - 4, x_midpoint ],
-      [ y_midpoint - 4, x_midpoint + 6 ],
-      [ y_midpoint, x_midpoint - 6 ],
-      [ y_midpoint, x_midpoint ],
-      [ y_midpoint, x_midpoint + 6 ],
-      [ y_midpoint + 4, x_midpoint - 6 ],
-      [ y_midpoint + 4, x_midpoint ],
-      [ y_midpoint + 4, x_midpoint + 6 ]
-    ]
-  end
-
-  def render_board
-    board.renderable_board.each_with_index do |board_line, index|
-      position_and_type_from_center(board_line, (board.height/2)-index,0,0)
-    end
-    border("|", "~")
-    position_and_type_from_center(INSTRUCTIONS, -board.height, 0,0)
   end
 end

@@ -8,7 +8,7 @@ class AI
   end
 
   def move(game_state)
-    GameTree.new(GameState.new(player, Board.new(game_state))).choose_move
+    GameTree.new(GameState.new(player, Board.new(state: game_state))).choose_move
   end
 
   private

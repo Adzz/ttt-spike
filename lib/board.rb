@@ -1,3 +1,5 @@
+require_relative './visual_board.rb'
+
 class Board
   WINNING_LINES = [
     [0,1,2],
