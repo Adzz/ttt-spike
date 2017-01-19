@@ -43,4 +43,3 @@ RSpec.describe GameTree do
     end
   end
 end
-
