@@ -42,6 +42,10 @@ module CursesWrapper
       screen.box(vertical_border, horizontal_border)
     end
 
+    def screen_refresh
+      screen.refresh
+    end
+
     def clear
       screen.clear
     end
