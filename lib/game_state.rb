@@ -12,12 +12,12 @@ class GameState
   end
 
   def successors
+    return [] if board.game_over?
     @successors ||= current_state.each_with_index.with_object([]) do |(value, index), successors|
       next unless value.is_a? Numeric
       possible_next_move = current_state.dup
-      # can we be a bit smarter here and do the win/loss calculation here?
       possible_next_move[index] = player
-      successors << GameState.new(other_player, Board.new(possible_next_move))
+      successors << GameState.new(other_player, Board.new(state: possible_next_move))
     end
   end
 

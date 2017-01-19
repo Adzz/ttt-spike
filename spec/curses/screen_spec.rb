@@ -1,6 +1,6 @@
 RSpec.describe CursesWrapper::Screen do
   let!(:curses) { double Curses }
-  subject { described_class(curses) }
+  subject { described_class.new(curses) }
 
   describe "#silent_keys" do
     it "calls noecho" do
