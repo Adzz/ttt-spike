@@ -27,8 +27,11 @@ class Menu
   private
 
   def_delegators :@curses,
-    :display, :position_and_type_from_center, :get_command,
-    :silent_keys, :char_under_cursor
+    :display,
+    :get_command,
+    :silent_keys,
+    :char_under_cursor,
+    :position_and_type_from_center
 
   def_delegator :@keyboard, :keys
 

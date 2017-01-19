@@ -4,8 +4,8 @@ require_relative '../views/welcome.rb'
 require_relative '../views/goodbye.rb'
 require_relative '../views/menu.rb'
 require_relative '../views/player_selection.rb'
-require_relative '../views/game/one_player_game.rb'
-require_relative '../views/game/two_player_game.rb'
+require_relative '../views/game/one_player.rb'
+require_relative '../views/game/two_player.rb'
 
 unless Welcome.new.screen
   Goodbye.new.screen
@@ -14,7 +14,7 @@ end
 
 case Menu.new.screen
 when true
-  OnePlayerGame.new(PlayerSelection.new.screen).screen
+  OnePlayer.new(PlayerSelection.new.screen).screen
 when false
-  TwoPlayerGame.new.screen
+  TwoPlayer.new.screen
 end

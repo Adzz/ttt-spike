@@ -52,25 +52,4 @@ RSpec.describe GameState do
       end
     end
   end
-
-  context 'won' do
-    it 'returns true when the current player won' do
-      game_state = GameState.new("X", Board.new(["X","X","X",3,"O","O","O",7,8]))
-      expect(game_state.won?).to be true
-    end
-
-    it 'returns false if they didnt' do
-      game_state = GameState.new("X", Board.new([*0..8]))
-      expect(game_state.won?).to be false
-      game_state = GameState.new("X", Board.new(["O","O",2,3,"X",5,6,"X",8]))
-      expect(game_state.won?).to be false
-    end
-  end
-
-  context 'lost?' do
-    it 'returns true if the current player lost'do
-      game_state = GameState.new("X", Board.new(["O","O","O",3,"X",5,"X","X",8]))
-      expect(game_state.lost?).to be true
-    end
-  end
 end

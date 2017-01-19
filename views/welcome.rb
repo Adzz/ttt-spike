@@ -26,7 +26,12 @@ class Welcome
   private
 
   def_delegators :@curses,
-    :display, :position_and_type_from_center, :refresh, :clear, :get_command, :user_response
+    :clear,
+    :display,
+    :refresh,
+    :get_command,
+    :user_response,
+    :position_and_type_from_center
 
   def welcome_message
     position_and_type_from_center(WELCOME_STRING,4)

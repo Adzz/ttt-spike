@@ -5,8 +5,7 @@ require_relative '../../lib/ai.rb'
 class OnePlayerGame
   extend Forwardable
 
-  INSTRUCTIONS = "Press r to reset the board Enter to place your mark, and q to quit the game".freeze
-
+  INSTRUCTIONS = "Press r to reset the board, Enter to place your mark, and q to quit the game".freeze
 
   def initialize(player)
     @curses = CursesWrapper::Screen.new
@@ -20,6 +19,7 @@ class OnePlayerGame
   def screen
     display do
       silent_keys
+      refresh
       start_new_game
     end
   end
@@ -27,8 +27,15 @@ class OnePlayerGame
   private
 
   def_delegators :@curses,
-    :display, :position_and_type_from_center, :get_command, :silent_keys, :y_midpoint, :x_midpoint,
-    :move_cursor_to, :refresh, :border
+    :border,
+    :display,
+    :refresh,
+    :y_midpoint,
+    :x_midpoint,
+    :silent_keys,
+    :get_command,
+    :move_cursor_to,
+    :position_and_type_from_center
 
   def_delegator :@keyboard, :keys
 
