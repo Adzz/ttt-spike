@@ -4,7 +4,7 @@ RSpec.describe Board do
 
     subject { described_class.new(visual_board: visual_board) }
     
-    before { allow(visual_board).to receive(:renderable_board) }
+    before { allow(visual_board).to receive(:render_board) }
 
     it 'updates the state of a board for the given position and player' do
       expect(subject.update_state(4, 'X')).to eq [0,1,2,3,'X',5,6,7,8]
@@ -12,7 +12,7 @@ RSpec.describe Board do
     end
 
     it "sends a message to the visual board to update it's state" do
-      expect(visual_board).to receive(:renderable_board).with([0,1,2,3,'X',5,6,7,8]).once
+      expect(visual_board).to receive(:render_board).with([0,1,2,3,'X',5,6,7,8]).once
       subject.update_state(4, 'X')
     end
   end

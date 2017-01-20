@@ -68,7 +68,7 @@ module CursesWrapper
     end
 
     def type(string, speed=0.01)
-      string.split("").each do |char|
+      string.each_char do |char|
         add_string(char)
         screen.refresh
         sleep(speed)

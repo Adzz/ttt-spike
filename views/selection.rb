@@ -1,30 +1,29 @@
 require_relative '../lib/curses/screen.rb'
 require_relative '../lib/curses/keyboard.rb'
 
-class Menu
+class Selection
   extend Forwardable
+  ARROW = '==> '.freeze
 
-  MENU_HEADING = "Choose Game Type".freeze
-  ONE_PLAYER   = "1. Go Solo".freeze
-  TWO_PLAYER   = "2. It's better with friends...".freeze
-  ARROW        = "==> ".freeze
-
-  def initialize
+  def initialize(choices)
     @curses = CursesWrapper::Screen.new
     @keyboard = CursesWrapper::Keyboard.new
+    @choices = choices
   end
 
   def screen
     display do
       silent_keys
-      position_and_type_from_center(MENU_HEADING, 7)
-      position_and_type_from_center(ONE_PLAYER, 2)
-      position_and_type_from_center(TWO_PLAYER)
-      one_player_game?
+      position_and_type_from_center(choices[0], 7)
+      position_and_type_from_center(choices[1], 2)
+      position_and_type_from_center(choices[2])
+      selection
     end
   end
 
   private
+
+  attr_reader :choices
 
   def_delegators :@curses,
     :display,
@@ -35,23 +34,20 @@ class Menu
 
   def_delegator :@keyboard, :keys
 
-  def one_player_game?
-    game_type == keys[:one]
-  end
-
-  def game_type
+  def selection
     response = get_command
     case response
     when keys[:up_arrow]
-      position_and_type_from_center(ARROW, 2, x_offset(ONE_PLAYER, ARROW))
-      game_type
+      position_and_type_from_center(ARROW, 2, x_offset(choices[1], ARROW))
+      selection
     when keys[:down_arrow]
-      position_and_type_from_center(ARROW, 0, x_offset(TWO_PLAYER, ARROW))
-      game_type
+      position_and_type_from_center(ARROW, 0, x_offset(choices[2], ARROW))
+      selection
     when ->(response) { keys[:return_key].include?(response) }
+
       return char_under_cursor
     else
-      game_type
+      selection
     end
   end
 

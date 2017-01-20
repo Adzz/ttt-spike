@@ -45,16 +45,16 @@ class GameTree
         next_game_state = first_game_state.successors[game_state_location]
         game_states.push(next_game_state)
 
-        if first_game_state.lost? # other player loses after our move
+        if first_game_state.lost?
           path.weight= (100 - game_states.length)
           break
-        elsif first_game_state.won? # other player wins after our first move - is this possible? Wouldn't they have won after their first move
+        elsif first_game_state.won?
           path.weight= (- (100 - game_states.length))
           break
         elsif next_game_state.lost?
-          if first_game_state.player == game_state.player # game_state.player is the first node we start with, which is us. if they are the same, we won after our first move.
+          if first_game_state.player == game_state.player
             path.weight= (100 - game_states.length)
-          else # we lost after our own move
+          else
             path.weight= (- (100 - game_states.length))
           end
           break

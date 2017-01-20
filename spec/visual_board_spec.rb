@@ -1,5 +1,13 @@
 RSpec.describe VisualBoard do
   describe '#renderable_board' do
+    let(:curses) {  double Curses }
+    before do
+      allow(curses).to receive(:position_and_type_from_center)
+      allow(curses).to receive(:border)
+    end
+
+    subject { described_class.new(view: curses) }
+
     let(:empty_state) do
       [
         "           |     |          ",
@@ -29,8 +37,15 @@ RSpec.describe VisualBoard do
     end
 
     it 'generates a representation of the given board state that can be rendered' do
-      expect(subject.renderable_board([*0..8])).to eq empty_state
-      expect(subject.renderable_board(["X",1,2,3,4,5,6,7,8])).to eq x_top_left
+      subject.render_board([*0..8])
+      expect(subject.visual_board_lines).to eq empty_state
+      subject.render_board(["X",1,2,3,4,5,6,7,8])
+      expect(subject.visual_board_lines).to eq x_top_left
+    end
+
+    it 'tells the front end to render the board' do
+      expect(curses).to receive(:position_and_type_from_center).exactly(subject.height + 1).times
+      subject.render_board([*0..8])
     end
   end
 

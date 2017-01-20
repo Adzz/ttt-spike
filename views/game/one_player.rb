@@ -3,9 +3,9 @@ require_relative '../../lib/ai.rb'
 
 class OnePlayer < Game
   def initialize(player)
+    super()
     @player = player
     @computer = AI.new(other_player)
-    super
   end
 
   def screen
@@ -20,15 +20,19 @@ class OnePlayer < Game
 
   def start_new_game
     @board = Board.new
-    render_board
+    board.render_board([*0..8])
+    get_command
     player_move if player == "X"
     computer_move if player == "O"
   end
 
-  attr_reader :board, :player, :computer
+  attr_reader :player, :computer
 
   def player_move
-    start_new_game if board.game_over?
+    if board.game_over?
+      sleep 2
+      start_new_game
+    end
     command = get_command
     case command
     when keys[:down_arrow]
@@ -50,7 +54,6 @@ class OnePlayer < Game
     when ->(command) { keys[:return_key].include?(command) }
       player_move unless cursor_within_board?
       board.update_state(cursor_position_on_board, player)
-      render_board
       computer_move
     when keys[:q]
       exit
@@ -62,11 +65,13 @@ class OnePlayer < Game
   end
 
   def computer_move
-    start_new_game if board.game_over?
+    if board.game_over?
+      sleep 2
+      start_new_game
+    end
     next_state = computer.move(board.state)
     position = (board.state - next_state).first
     board.update_state(position, other_player)
-    render_board
     player_move
   end
 

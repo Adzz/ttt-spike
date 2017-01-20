@@ -24,18 +24,19 @@ class Board
   end
 
   def winning_board_for?(player)
-    WINNING_LINES.each do |line|
-      if state.values_at(*line) == [player, player, player]
-        return true
-      end
+    WINNING_LINES.any? do |line|
+      state.values_at(*line) == [player, player, player]
     end
-    false
   end
 
   def update_state(position, player)
     state[position] = player
-    visual_board.renderable_board(state)
+    render_board(state)
     state
+  end
+
+  def render_board(state=[*0..8])
+    visual_board.render_board(state)
   end
 
   private

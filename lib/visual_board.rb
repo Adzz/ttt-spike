@@ -1,5 +1,11 @@
+require_relative '../lib/curses/screen.rb'
+
 class VisualBoard
-  def initialize
+  INSTRUCTIONS = "Press enter to place your mark, r to reset the board and q to quit".freeze
+
+  attr_reader :visual_board_lines, :view
+
+  def initialize(view: CursesWrapper::Screen.new)
     @visual_board_lines = [
       "           |     |          ",
       "           |     |          ",
@@ -11,15 +17,16 @@ class VisualBoard
       "           |     |          ",
       "           |     |          "
     ]
+    @view = view
   end
 
-  def renderable_board(state)
+  def render_board(state)
     cells.each_with_index do |cell, index|
       visual_board_lines[cell[0]][cell[1]] = "X" if state[index] == "X"
       visual_board_lines[cell[0]][cell[1]] = "O" if state[index] == "O"
       visual_board_lines[cell[0]][cell[1]] = " " if state[index].is_a? Numeric
     end
-    visual_board_lines
+    render(visual_board_lines)
   end
 
   def height
@@ -32,8 +39,14 @@ class VisualBoard
 
   private
 
-  attr_reader :visual_board_lines
-  
+  def render(visual_board_lines)
+    visual_board_lines.each_with_index do |board_line, index|
+      view.position_and_type_from_center(board_line, (height / 2) - index, 0, 0)
+    end
+    view.border("|", "~")
+    view.position_and_type_from_center(INSTRUCTIONS, - height, 0, 0)
+  end
+
   def cells
     @cells ||= [
       [1,8],[1,14],[1,20],
