@@ -1,6 +1,7 @@
 require_relative './visual_board.rb'
 
 class Board
+  # make this programatic/algorythmic. If the board size changes, the size of a winning line works too.
   WINNING_LINES = [
     [0,1,2],
     [3,4,5],
@@ -24,12 +25,9 @@ class Board
   end
 
   def winning_board_for?(player)
-    WINNING_LINES.each do |line|
-      if state.values_at(*line) == [player, player, player]
-        return true
-      end
+    WINNING_LINES.any? do |line|
+      state.values_at(*line) == [player, player, player]
     end
-    false
   end
 
   def update_state(position, player)

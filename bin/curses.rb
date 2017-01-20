@@ -1,4 +1,4 @@
-#!/usr/local/bin/ruby
+#!/usr/local/bin/ruby -w
 
 require_relative '../views/welcome.rb'
 require_relative '../views/goodbye.rb'
