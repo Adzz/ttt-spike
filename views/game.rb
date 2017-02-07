@@ -6,13 +6,12 @@ class Game
 
   INSTRUCTIONS = "Press r to reset the board, Enter to place your mark, and q to quit the game".freeze
 
-  def initialize(*)
+  def initialize
     @curses = CursesWrapper::Screen.new
     @keyboard = CursesWrapper::Keyboard.new
     @position_x = x_midpoint
     @position_y = y_midpoint
-    @visual_board = VisualBoard.new
-    @board = Board.new(visual_board: visual_board)
+    @board = Board.new
   end
 
   private
@@ -52,13 +51,5 @@ class Game
       [ y_midpoint + 4, x_midpoint ],
       [ y_midpoint + 4, x_midpoint + 6 ]
     ]
-  end
-
-  def render_board
-    visual_board.renderable_board(board.state).each_with_index do |board_line, index|
-      position_and_type_from_center(board_line, (visual_board.height/2)-index,0,0)
-    end
-    border("|", "~")
-    position_and_type_from_center(INSTRUCTIONS, -visual_board.height, 0,0)
   end
 end

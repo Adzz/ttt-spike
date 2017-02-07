@@ -35,6 +35,9 @@ RSpec.describe GameTree do
     it "will block an opponent's winning move" do
       gt = described_class.new(GameState.new("O", Board.new(state: ["X","O","X","O","O","X",6,"X",8])))
       expect(gt.choose_move).to eq ["X","O","X","O","O","X",6,"X","O"]
+
+      gt = described_class.new(GameState.new("O", Board.new(state: ["O",1,2,"X","X",5,6,7,8])))
+      expect(gt.choose_move).to eq ["O",1,2,"X","X","O",6,7,8]
     end
 
     it "will chose a winning move over blocking an opponent's winning move" do

@@ -1,7 +1,7 @@
 RSpec.describe CursesWrapper::Keyboard do
   describe "#keys" do
     it "maps the number 1 to its ASCII number" do
-      expect(subject.keys[:one]).to eq 49
+      expect(subject.keys[:"1"]).to eq 49
     end
 
     it "maps the up_arrow to its ASCII number" do
@@ -22,6 +22,10 @@ RSpec.describe CursesWrapper::Keyboard do
 
     it "maps the x key to its ASCII number" do
       expect(subject.keys[:x].ord).to eq 120
+    end
+
+    it "maps the X key to its ASCII number" do
+      expect(subject.keys[:X].ord).to eq 88
     end
 
     it "maps the q to its ASCII number" do

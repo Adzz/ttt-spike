@@ -5,7 +5,7 @@ class TwoPlayer < Game
     display do
       silent_keys
       refresh
-      render_board
+      board.render_board
       play_game
     end
   end
@@ -34,10 +34,13 @@ class TwoPlayer < Game
         play_game unless cursor_within_board?
         type('X')
       when keys[:q]
-        break
+        exit
       when keys[:o]
         play_game unless cursor_within_board?
         type('O')
+      when keys[:r]
+        board.render_board
+        play_game
       when keys[:d]
         delete_char_under_cursor
         insert_char_before_cursor(' ')

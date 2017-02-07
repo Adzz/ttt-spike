@@ -32,8 +32,12 @@ class Board
 
   def update_state(position, player)
     state[position] = player
-    visual_board.renderable_board(state)
+    render_board(state)
     state
+  end
+
+  def render_board(state=[*0..8])
+    visual_board.render_board(state)
   end
 
   private
