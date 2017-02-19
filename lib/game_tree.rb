@@ -45,6 +45,25 @@ class GameTree
         next_game_state = first_game_state.successors[game_state_location]
         game_states.push(next_game_state)
 
+        # if first_game_state.won?
+        #   path.weight= (100 - game_states.length)
+        #   break
+        # end
+
+        # if first_game_state.lost?
+        #   path.weight= (- (100 - game_states.length))
+        #   break
+        # end
+
+        # if next_game_state.lost?
+        #   if first_game_state.player == game_state.player
+        #     path.weight= (100 - game_states.length)
+        #   else
+        #     path.weight= (- (100 - game_states.length))
+        #   end
+        #   break
+        # end
+
         if first_game_state.lost?
           path.weight= (100 - game_states.length)
           break
