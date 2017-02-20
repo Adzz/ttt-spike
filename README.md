@@ -12,3 +12,4 @@ How do you test? How do you ensure you test enough possibilities without having 
 - Take account of symmetry
 - Add alpha beta prunning
 - Comp vs Comp
+- Make a gem (and publish)
