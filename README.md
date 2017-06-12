@@ -8,7 +8,7 @@ To play, clone the repo, `cd` into it, run `bundle` then run `bundle exec ruby b
 How do you test? How do you ensure you test enough possibilities without having to test everyone? Do we just test every possibility?
 
 # To Do
-
+- Make it actually unbeatable
 - Take account of symmetry
 - Add alpha beta prunning
 - Comp vs Comp
